@@ -9,8 +9,15 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.vladimir.zubencko</groupId>
     <artifactId>socit.service</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.vladimir.zubencko</groupId>
+            <artifactId>socit.domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
