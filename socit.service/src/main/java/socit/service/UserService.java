@@ -15,5 +15,7 @@ public interface UserService extends BaseService<User, Integer> {
 
     String getFullUrl(HttpServletRequest req, String email);
 
+    User getByLogin(String login);
+
     boolean isAutentificate();
 }

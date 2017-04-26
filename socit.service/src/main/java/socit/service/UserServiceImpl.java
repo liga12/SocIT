@@ -80,6 +80,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public User getByLogin(String login){
+        return userRepository.findByLogin(login);
+    }
+    @Override
     public void registrationUser(Registrator registrator, HttpServletRequest request) {
         String email = registrator.getEmail();
         new ValidatorAuthentication().validate(registrator, new ValidatorAuthentication().getValidator());
