@@ -58,9 +58,7 @@ public class User implements UserDetails, GrantedAuthority {
     @Setter
     private String authority;
 
-    @OneToOne(fetch = FetchType.LAZY,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-            mappedBy = "user")
+    @OneToOne(mappedBy = "user")
     @Getter
     @Setter
     private URLMassage urlMassages;
