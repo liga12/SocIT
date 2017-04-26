@@ -58,6 +58,13 @@ public class User implements UserDetails, GrantedAuthority {
     @Setter
     private String authority;
 
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+            mappedBy = "user")
+    @Getter
+    @Setter
+    private URLMassage urlMassages;
+
     public User(String login, String password, String firstName, String lastName, String email, Boolean status, String authority) {
         this.login = login;
         this.password = password;
