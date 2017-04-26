@@ -42,10 +42,6 @@ public class Mailer {
         props.put(MAIL_SMTP_SOCKET_FACTORY_CLASS, bandler.getResourcesEmail(MAIL_SMTP_SOCKET_FACTORY_CLASS));
         props.put(MAIL_SMTP_AUTH, bandler.getResourcesEmail(MAIL_SMTP_AUTH));
         props.put(MAIL_SMTP_PORT, bandler.getResourcesEmail(MAIL_SMTP_PORT));
-
-        props.put(mail_smtp_debug, bandler.getResourcesEmail(mail_smtp_debug));
-        props.put(mail_smtp_socketFactory_fallback, bandler.getResourcesEmail(mail_smtp_socketFactory_fallback));
-        props.put(mail_smtp_tarttls_enable, bandler.getResourcesEmail(mail_smtp_tarttls_enable));
         //get Session
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
