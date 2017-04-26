@@ -8,5 +8,5 @@ import socit.domain.entity.URLMassage;
 public interface URLMassageRepository extends JpaRepository<URLMassage, Integer> {
 
     @Query("select case when count (u) > 0  then true else false end from URLMassage u where u.url = :url")
-    URLMassage existsByUrl(@Param("url")String url);
+    Boolean existsByUrl(@Param("url")String url);
 }
