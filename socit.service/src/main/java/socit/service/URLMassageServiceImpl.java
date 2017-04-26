@@ -53,8 +53,8 @@ public class URLMassageServiceImpl implements URLMassageService {
 
     @Override
     @Transactional
-    public Boolean existsByUrl(String url) {
-        return urlMessageRepository.existsByUrl(url);
+    public URLMassage getByUrl(String url) {
+        return urlMessageRepository.findByUrl(url);
     }
 
     @Override

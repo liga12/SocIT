@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface URLMassageService extends BaseService<URLMassage, Integer> {
 
-    Boolean existsByUrl(String url);
+    URLMassage getByUrl(String url);
 
     String getURL(HttpServletRequest req);
 
