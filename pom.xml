@@ -11,6 +11,7 @@
     <modules>
         <module>socit.domain</module>
         <module>socit.service</module>
+        <module>socit.web</module>
     </modules>
 
 
