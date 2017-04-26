@@ -31,10 +31,10 @@ public class ValidatorAuthentication {
                 throw new RegistrationException("Password not equal passwordConfirmation");
             }
             try {
-                if (userService.getByLogin(registrator.getLogin()) != null) {
+                if (userService.existsByLogin(registrator.getLogin())) {
                     throw new RegistrationException("Login = " + registrator.getLogin() + " already exist");
                 }
-                if (null != userService.getByEmail(registrator.getEmail())) {
+                if (userService.existsByEmail(registrator.getEmail())) {
                     throw new RegistrationException("Email = " + registrator.getEmail() + " already exist");
                 }
             } catch (NullPointerException e) {
