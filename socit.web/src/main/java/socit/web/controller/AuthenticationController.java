@@ -38,9 +38,7 @@ public class AuthenticationController {
     @RequestMapping(value = "/login")
     public ModelAndView loginPage(@RequestParam(value = "error", required = false) String error) {
         ModelAndView model = new ModelAndView("login");
-        Integer id = 16;
-        urlMassageService.remove(16);
-        if (userService.isAutentificate()) {
+        if (userService.isAuthenticate()) {
             return new ModelAndView("redirect:/user/home");
         }
         if (error != null) {
@@ -51,7 +49,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/registrationPage", method = RequestMethod.GET)
     public String toRegistrationPage() {
-        if (userService.isAutentificate()) {
+        if (userService.isAuthenticate()) {
             return "redirect:/user/home";
         }
         return "registration";
@@ -63,7 +61,7 @@ public class AuthenticationController {
                                      @RequestParam(value = "passwordConfirmation", required = false) String passwordConfirmation, @RequestParam(value = "email", required = false) String email,
                                      HttpServletRequest request)
             throws ServletException, IOException {
-        if (userService.isAutentificate()) {
+        if (userService.isAuthenticate()) {
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("onEmail");
@@ -86,7 +84,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/emailRegis/*")
     public ModelAndView emailRegistration(HttpServletRequest request) {
-        if (userService.isAutentificate()) {
+        if (userService.isAuthenticate()) {
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("/login");
@@ -95,8 +93,7 @@ public class AuthenticationController {
             User user = urlMassage.getUser();
             user.setStatus(true);
             userService.update(user);
-            Integer id = urlMassage.getId();
-            urlMassageService.remove(id);
+            urlMassageService.remove(urlMassage);
             modelAndView.addObject("error", "You have confirmed the registration."
                     + " Enter the username and password to log on to the website");
         } else {

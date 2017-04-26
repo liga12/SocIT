@@ -9,7 +9,7 @@ public class RegistrationException extends RuntimeException {
     @Setter
     private String errorMessage;
 
-    public RegistrationException(String errorMessage) {
+    RegistrationException(String errorMessage) {
         super(errorMessage);
     }
 

@@ -1,6 +1,5 @@
 package socit.domain.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import java.io.Serializable;
 @Entity
 @Table(name = "url_message")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude="id")
 public class URLMassage implements Serializable {
 
   @Id
@@ -27,7 +25,7 @@ public class URLMassage implements Serializable {
   private String url;
 
   @JoinColumn(name = "id_user", referencedColumnName = "id")
-  @OneToOne(optional = false)
+  @ManyToOne(optional = false)
   @Getter
   @Setter
   private User user;
@@ -35,6 +33,5 @@ public class URLMassage implements Serializable {
   public URLMassage(String url, User user){
     this.url = url;
     this.user = user;
-
   }
 }

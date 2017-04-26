@@ -82,11 +82,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetailsService detailsService = new UserDetailsService() {
+        return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
                 System.out.println("UserDETAILS");
-                User user=null;
+                User user;
                 try {
                     user = userService.getByLogin(login);
                 } catch (Exception ex) {
@@ -100,7 +100,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 return  (UserDetails) user;
             }
         };
-        return detailsService;
     }
 
     @Bean

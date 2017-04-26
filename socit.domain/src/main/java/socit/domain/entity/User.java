@@ -1,6 +1,5 @@
 package socit.domain.entity;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = "id")
 public class User implements UserDetails, GrantedAuthority {
 
     @Id
@@ -58,10 +56,10 @@ public class User implements UserDetails, GrantedAuthority {
     @Setter
     private String authority;
 
-    @OneToOne(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     @Getter
     @Setter
-    private URLMassage urlMassages;
+    private List<URLMassage> urlMassages;
 
     public User(String login, String password, String firstName, String lastName, String email, Boolean status, String authority) {
         this.login = login;

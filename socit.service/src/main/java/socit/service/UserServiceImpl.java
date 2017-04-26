@@ -10,33 +10,27 @@ import org.springframework.transaction.annotation.Transactional;
 import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.domain.repository.UserRepository;
-import socit.service.util.Mailer;
+import socit.service.util.MailerImpl;
 import socit.service.util.Registrator;
 import socit.service.util.ValidatorAuthentication;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class UserServiceImpl implements UserService {
-
-    private Pattern pattern;
-    private Matcher matcher;
-    private static final String EMAIL_PATTERN =
-            "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
-                    + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    @Autowired
+    private MailerImpl mailer;
 
     @Autowired
-    Mailer mailer;
-
-    @Autowired
-    URLMassageService urlMassageService;
+    private URLMassageService urlMassageService;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ValidatorAuthentication validatorAuthenticate;
 
     @Override
     @Transactional
@@ -64,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAll() {
-        return  userRepository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
@@ -81,15 +75,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User getByLogin(String login){
+    public User getByLogin(String login) {
         return userRepository.findByLogin(login);
     }
+
     @Override
     public void registrationUser(Registrator registrator, HttpServletRequest request) {
         String email = registrator.getEmail();
-        new ValidatorAuthentication().validate(registrator, new ValidatorAuthentication().getValidator());
+        validatorAuthenticate.validate(registrator, validatorAuthenticate.getValidator());
         User user = new User(registrator.getLogin(), passwordEncoder().encode(registrator.getPassword()),
-                registrator.getFirstName(), registrator.getLastName(), email, false ,"ROLE_USER" );
+                registrator.getFirstName(), registrator.getLastName(), email, false, "ROLE_USER");
         save(user);
         String url = getFullUrl(request, email);
         URLMassage urlMassage = new URLMassage(url, user);
@@ -98,20 +93,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getFullUrl(HttpServletRequest req, String email){
+    public String getFullUrl(HttpServletRequest req, String email) {
         String scheme = req.getScheme();
         String serverName = req.getServerName();
-        StringBuilder url = new StringBuilder();
-        url.append(scheme).append("://").append(serverName);
-        url.append(":").append(req.getServerPort());
-        url.append("/emailRegis/").append(passwordEncoder().encode(email));
-        return url.toString();
+        return scheme + "://" + serverName +
+                ":" + req.getServerPort() +
+                "/emailRegis/" + passwordEncoder().encode(email);
     }
 
     @Override
-    public boolean isAutentificate() {
+    public boolean isAuthenticate() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return (principal != null && principal instanceof User && ((User) principal).getStatus() == true) ? true : false;
+        return principal != null && principal instanceof User;
     }
 
     @Bean

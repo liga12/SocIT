@@ -6,15 +6,15 @@ import java.io.*;
 
 public class InputStreamDataSource implements DataSource {
 
-    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    private ByteArrayOutputStream buffer = new ByteArrayOutputStream();
     private final String name;
 
-    public InputStreamDataSource(InputStream inputStream, String name) {
+    InputStreamDataSource(InputStream inputStream, String name) {
         this.name = name;
         try {
             int nRead;
             byte[] data = new byte[16384];
-            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
+            while (-1 != (nRead = inputStream.read(data, 0, data.length))) {
                 buffer.write(data, 0, nRead);
             }
             buffer.flush();
