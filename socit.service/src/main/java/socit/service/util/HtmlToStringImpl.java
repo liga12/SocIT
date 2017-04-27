@@ -1,5 +1,6 @@
 package socit.service.util;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -8,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 @Component
+@Log4j
 public class HtmlToStringImpl implements HtmlToString {
     private static final InputStream resourcesHtml = HtmlToStringImpl.class.getClassLoader().
             getResourceAsStream("emailHtml.html");
@@ -26,6 +28,7 @@ public class HtmlToStringImpl implements HtmlToString {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        log.debug("html parse success");
         return stringHtml;
     }
 }

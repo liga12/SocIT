@@ -53,14 +53,17 @@ public class Registrator {
     @Setter
     @NotNull(message = "passwordConfirmation must be not null")
     @Size(min = 8, max = 248, message = "PasswordConfirmation must be in the range from 8 to 248 characters")
-
     private String passwordConfirmation;
-    public Registrator(String firstName, String lastName, String login, String email, String password, String passwordConfirmation) {
+
+    public Registrator(String firstName, String lastName, String login, String email, String password,
+                       String passwordConfirmation) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.login = login;
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
+        log.debug("Set values: firstName = "+firstName+", lastName = "+lastName+", email = "+email
+                +", login = "+login+", password = "+password+", passwordConfirmation = "+passwordConfirmation);
     }
 }

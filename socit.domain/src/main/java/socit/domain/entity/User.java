@@ -3,6 +3,7 @@ package socit.domain.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
+@Log4j
 public class User implements UserDetails, GrantedAuthority {
 
     @Id
@@ -75,6 +77,8 @@ public class User implements UserDetails, GrantedAuthority {
         this.email = email;
         this.status = status;
         this.authority = authority;
+        log.debug("Set values: firstName = "+firstName+", lastName = "+lastName+", email = "+email
+                +", login = "+login+", password = "+password+", status = "+status+", authority = "+authority);
     }
 
     @Override

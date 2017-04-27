@@ -47,8 +47,4 @@ public class PhotoPost implements Serializable {
         this.status = status;
         this.post = post;
     }
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
 }

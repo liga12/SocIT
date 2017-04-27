@@ -1,5 +1,6 @@
 package socit.web.config;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
+@Log4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -86,15 +88,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             @Override
             public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
                 System.out.println("UserDETAILS");
-                User user;
+                User user = null;
                 try {
                     user = userService.getByLogin(login);
                 } catch (Exception ex) {
-                    System.out.println("user not found or error");
                     ex.printStackTrace();
+                    log.error("User not found: can't find user: login" + login);
                     throw new UsernameNotFoundException("can't find user@login" + login);
                 }
                 if (user == null) {
+                    log.error("User not found: can't find user: login = " + login);
                     throw new UsernameNotFoundException("can't find user@ulogin" + login);
                 }
                 return  (UserDetails) user;

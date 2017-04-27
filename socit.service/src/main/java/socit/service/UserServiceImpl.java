@@ -84,13 +84,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registrationUser(Registrator registrator, HttpServletRequest request) {
         String email = registrator.getEmail();
+        log.debug("Get validate");
         validatorAuthenticate.validate(registrator, validatorAuthenticate.getValidator());
+        log.debug("Set User");
         User user = new User(registrator.getLogin(), passwordEncoder().encode(registrator.getPassword()),
                 registrator.getFirstName(), registrator.getLastName(), email, false, "ROLE_USER");
+        log.debug("Save User");
         save(user);
+        log.debug("Get fullURL by email");
         String url = getFullUrl(request, email);
+        log.debug("Full URL = "+url);
+        log.debug("Set URLMassage");
         URLMassage urlMassage = new URLMassage(url, user);
+        log.debug("Save urlMassage");
         urlMassageService.save(urlMassage);
+        log.debug("Send email");
         mailer.send(email, url);
     }
 
@@ -104,10 +112,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getAuthentication() {
+    public Boolean isAuthenticate() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.debug("Get authentication");
-        return (principal != null && principal instanceof User)? (User) principal :null;
+        if (principal != null && principal instanceof User){
+            log.debug("Authentication success");
+            return true;
+        }else {
+            log.debug("Authentication failed");
+            return false;
+        }
     }
 
     @Bean
@@ -123,6 +136,7 @@ public class UserServiceImpl implements UserService {
             @Override
             @SuppressWarnings("PMD")
             public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                log.debug("Get encode password");
                 return (md5.encodePassword(rawPassword.toString(), 1)).equals(encodedPassword);
             }
         };

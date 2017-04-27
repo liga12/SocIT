@@ -1,6 +1,7 @@
 package socit.service.util;
 
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,54 +17,62 @@ import java.util.Properties;
 
 
 @Service
+@Log4j
 public class MailerImpl implements Mailer {
-
-    @Autowired
-    ResourcesBandlerImpl bandler;
-
-    @Autowired
-    HtmlToStringImpl htmlToString;
 
     private static final String MAIL_SMTP_HOST = "mail.smtp.host";
     private static final String MAIL_SMTP_SOCKET_FACTORY_PORT = "mail.smtp.socketFactory.port";
     private static final String MAIL_SMTP_SOCKET_FACTORY_CLASS = "mail.smtp.socketFactory.class";
     private static final String MAIL_SMTP_AUTH = "mail.smtp.auth";
     private static final String MAIL_SMTP_PORT = "mail.smtp.port";
+    private static final String MAIL_SMTP_TARTTLS_ENABLE = "mail.smtp.starttls.enable";
+    private static final String MAIL_SMTP_DEBUG = "mail.smtp.debug";
+    private static final String MAIL_SMTP_SOCKETFACTORY_FULLBACK = "mail.smtp.socketFactory.fallback";
+    private static final String FROM = "from";
 
-    private static final String mail_smtp_tarttls_enable = "mail.smtp.starttls.enable";
-    private static final String mail_smtp_debug = "mail.smtp.debug";
-    private static final String mail_smtp_socketFactory_fallback = "mail.smtp.port";
+    @Autowired
+    HtmlToStringImpl htmlToString;
 
     @Override
     public void send(String to, String URLLocalhost) {
-        //Get properties object
-        Properties props = new Properties();
-        props.put(MAIL_SMTP_HOST, bandler.getResourcesEmail(MAIL_SMTP_HOST));
-        props.put(MAIL_SMTP_SOCKET_FACTORY_PORT, bandler.getResourcesEmail(MAIL_SMTP_SOCKET_FACTORY_PORT));
-        props.put(MAIL_SMTP_SOCKET_FACTORY_CLASS, bandler.getResourcesEmail(MAIL_SMTP_SOCKET_FACTORY_CLASS));
-        props.put(MAIL_SMTP_AUTH, bandler.getResourcesEmail(MAIL_SMTP_AUTH));
-        props.put(MAIL_SMTP_PORT, bandler.getResourcesEmail(MAIL_SMTP_PORT));
+        log.debug("Email to = " + to);
+        log.debug("Email Link to confirmed = " + URLLocalhost);
 
-        props.put(mail_smtp_debug, bandler.getResourcesEmail(mail_smtp_debug));
-        props.put(mail_smtp_socketFactory_fallback, bandler.getResourcesEmail(mail_smtp_socketFactory_fallback));
-        props.put(mail_smtp_tarttls_enable, bandler.getResourcesEmail(mail_smtp_tarttls_enable));
+        //Get properties object
+        ResourcesBandler bandler = new ResourcesBandler("email");
+        Properties props = new Properties();
+        log.debug("Set properties for email: " + MAIL_SMTP_HOST);
+        props.put(MAIL_SMTP_HOST, bandler.getResources(MAIL_SMTP_HOST));
+        log.debug("Set properties for email: " + MAIL_SMTP_SOCKET_FACTORY_PORT);
+        props.put(MAIL_SMTP_SOCKET_FACTORY_PORT, bandler.getResources(MAIL_SMTP_SOCKET_FACTORY_PORT));
+        log.debug("Set properties for email: " + MAIL_SMTP_SOCKET_FACTORY_CLASS);
+        props.put(MAIL_SMTP_SOCKET_FACTORY_CLASS, bandler.getResources(MAIL_SMTP_SOCKET_FACTORY_CLASS));
+        log.debug("Set properties for email: " + MAIL_SMTP_AUTH);
+        props.put(MAIL_SMTP_AUTH, bandler.getResources(MAIL_SMTP_AUTH));
+        log.debug("Set properties for email: " + MAIL_SMTP_PORT);
+        props.put(MAIL_SMTP_PORT, bandler.getResources(MAIL_SMTP_PORT));
+        log.debug("Set properties for email: " + MAIL_SMTP_DEBUG);
+        props.put(MAIL_SMTP_DEBUG, bandler.getResources(MAIL_SMTP_DEBUG));
+        log.debug("Set properties for email: " + MAIL_SMTP_TARTTLS_ENABLE);
+        props.put(MAIL_SMTP_TARTTLS_ENABLE, bandler.getResources(MAIL_SMTP_TARTTLS_ENABLE));
 
 
         //get Session
         Session session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(bandler.getResourcesEmail("from"),
-                                bandler.getResourcesEmail("password"));
+                        log.debug("Email from = " + bandler.getResources(FROM));
+                        return new PasswordAuthentication(bandler.getResources(FROM),
+                                bandler.getResources("password"));
                     }
                 });
         //compose message
         try {
             MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(bandler.getResourcesEmail("from")));
+            message.setFrom(new InternetAddress(bandler.getResources(FROM)));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setHeader("Content-Type", "text/plain; charset=UTF-8");
-            message.setSubject(bandler.getResourcesEmail("sub"));
+            message.setSubject(bandler.getResources("sub"));
 
             MimeMultipart mp = new MimeMultipart();
             BodyPart messageBodyPart = new MimeBodyPart();
@@ -73,10 +82,10 @@ public class MailerImpl implements Mailer {
             messageBodyPart.setContent(htmlString, "text/html; charset=utf-8");
             mp.addBodyPart(messageBodyPart);
 
+            log.debug("Get html");
             InputStream resourceAsStream = HtmlToStringImpl.class.getClassLoader()
                     .getResourceAsStream("images.jpg");
             DataHandler dataHandler = new DataHandler(new InputStreamDataSource(resourceAsStream, "t"));
-
             messageBodyPart = new MimeBodyPart();
             messageBodyPart.setDataHandler(dataHandler);
             messageBodyPart.setHeader("Content-ID", "<image>");
@@ -84,9 +93,10 @@ public class MailerImpl implements Mailer {
 
             message.setContent(mp);
             Transport.send(message);
-            System.out.println("message sent successfully");
+            log.debug("Message sent successfully");
         } catch (MessagingException e) {
-            throw new RuntimeException("Error while send message for: " + URLLocalhost , e);
+            log.error("Error while send message for: " + e.getMessage());
+            throw new RuntimeException("Error while send message for: " + URLLocalhost, e);
         }
     }
 }
