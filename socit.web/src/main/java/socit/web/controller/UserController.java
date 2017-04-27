@@ -51,7 +51,6 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView("user_wall");
         if (user.getStatus()) {
             modelAndView.addObject("user", user);
-}
 
             List<Post> listPost = new ArrayList<>();
             List<Post> lists = user.getPosts();
@@ -85,7 +84,7 @@ public class UserController {
 
     @RequestMapping(value = "/post/delete")
     public String postDelete(@RequestParam(value = "id") Integer id) {
-        postService.removeById(id);
+        postService.remove(id);
         return "redirect:/user/home";
 
 
