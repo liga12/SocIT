@@ -40,14 +40,10 @@ public class UserController {
     @RequestMapping(value = "/user/home")
     public ModelAndView toUserWall() {
         log.debug("request: /user/home");
+        log.debug("Get user by authentication user");
         User userByAuthentication = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.debug("Get user by authentication user: login = " + userByAuthentication.getLogin()
-                + ", password = " + userByAuthentication.getPassword() + ", id = " + userByAuthentication.getId() + ","
-                + " firstName = " + userByAuthentication.getFirstName() + ", lastName = " + userByAuthentication.getLastName()
-                + ", email = " + userByAuthentication.getEmail() + ", status = " + userByAuthentication.getStatus()
-                + ", authority = "+userByAuthentication.getAuthority());
+        log.debug("Get user by id = " + userByAuthentication.getId());
         User user = userService.getById(userByAuthentication.getId());
-        log.info("Get user by id = " + userByAuthentication.getId() + " ");
         ModelAndView modelAndView = new ModelAndView("user_wall");
         if (user.getStatus()) {
             modelAndView.addObject("user", user);
