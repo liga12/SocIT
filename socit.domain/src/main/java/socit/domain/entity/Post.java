@@ -62,12 +62,11 @@ public class Post implements Serializable {
     @Getter
     @Setter
     private List<Bookmark> bookmarkList;
-//
-//    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, }
-//           , mappedBy = "post")
-//    @Getter
-//    @Setter
-//    private List<Comment> commentList;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+    @Getter
+    @Setter
+    private List<Comment> commentList;
 
     public Post(String comment, boolean status, User user) {
         this.comment = comment;
