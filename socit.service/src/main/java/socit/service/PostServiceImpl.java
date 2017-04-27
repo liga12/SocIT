@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Service
-@EnableTransactionManagement
 public class PostServiceImpl implements PostService {
 
     @Autowired
