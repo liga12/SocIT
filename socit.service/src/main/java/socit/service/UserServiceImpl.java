@@ -1,5 +1,6 @@
 package socit.service;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
@@ -19,6 +20,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Service
+@Log4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private MailerImpl mailer;
@@ -102,9 +104,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isAuthenticate() {
+    public User getAuthentication() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return principal != null && principal instanceof User;
+        log.debug("Get authentication");
+        return (principal != null && principal instanceof User)? (User) principal :null;
     }
 
     @Bean

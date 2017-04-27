@@ -1,5 +1,6 @@
 package socit.web.controller;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Controller
+@Log4j
 public class AuthenticationController {
 
     @Autowired
@@ -26,19 +28,19 @@ public class AuthenticationController {
     @Autowired
     private URLMassageService urlMassageService;
 
-    private String data = "";
-
-
     @RequestMapping(value = "/")
     public String startPage() {
+        log.debug("Request URL = /");
+        log.debug("Redirect from URL = / to URL = login");
         return "redirect:/login";
     }
 
-
     @RequestMapping(value = "/login")
     public ModelAndView loginPage(@RequestParam(value = "error", required = false) String error) {
+        log.debug("Request URL = /login");
         ModelAndView model = new ModelAndView("login");
-        if (userService.isAuthenticate()) {
+        if (userService.getAuthentication() != null) {
+            log.debug("Redirect from URL = /user/home");
             return new ModelAndView("redirect:/user/home");
         }
         if (error != null) {
@@ -49,7 +51,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/registrationPage", method = RequestMethod.GET)
     public String toRegistrationPage() {
-        if (userService.isAuthenticate()) {
+        if (userService.getAuthentication() != null) {
             return "redirect:/user/home";
         }
         return "registration";
@@ -61,7 +63,7 @@ public class AuthenticationController {
                                      @RequestParam(value = "passwordConfirmation", required = false) String passwordConfirmation, @RequestParam(value = "email", required = false) String email,
                                      HttpServletRequest request)
             throws ServletException, IOException {
-        if (userService.isAuthenticate()) {
+        if (userService.getAuthentication() != null) {
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("onEmail");
@@ -72,11 +74,9 @@ public class AuthenticationController {
             String[] emails = email.split("@");
             String emailClient = emails[1];
             modelAndView.addObject("host", "https://" + emailClient);
-        }catch (RegistrationException e){
-            data = e.getMessage();
+        } catch (RegistrationException e) {
             modelAndView.setViewName("registration");
             modelAndView.addObject("data", e.getMessage());
-            data = null;
             return modelAndView;
         }
         return modelAndView;
@@ -84,7 +84,7 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/emailRegis/*")
     public ModelAndView emailRegistration(HttpServletRequest request) {
-        if (userService.isAuthenticate()) {
+        if (userService.getAuthentication() != null) {
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("/login");

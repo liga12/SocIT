@@ -17,5 +17,5 @@ public interface UserService extends BaseService<User, Integer> {
 
     User getByLogin(String login);
 
-    boolean isAuthenticate();
+    User getAuthentication();
 }
