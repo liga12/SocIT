@@ -53,24 +53,24 @@ public class Post implements Serializable {
     @Setter
     private User user;
 
-    @OneToMany(fetch = FetchType.EAGER,  cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-             mappedBy = "post")
-//    @Fetch(value = FetchMode.SUBSELECT)
-    @Getter
-    @Setter
-    private List<PhotoPost> photoPostList;
-
-    @OneToMany(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE},
-             mappedBy = "post")
-    @Getter
-    @Setter
-    private List<Bookmark> bookmarkList;
-
-    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, }
-           , mappedBy = "post")
-    @Getter
-    @Setter
-    private List<Comment> commentList;
+//    @OneToMany(fetch = FetchType.EAGER,  cascade = {CascadeType.MERGE, CascadeType.PERSIST},
+//             mappedBy = "post")
+////    @Fetch(value = FetchMode.SUBSELECT)
+//    @Getter
+//    @Setter
+//    private List<PhotoPost> photoPostList;
+//
+//    @OneToMany(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE},
+//             mappedBy = "post")
+//    @Getter
+//    @Setter
+//    private List<Bookmark> bookmarkList;
+//
+//    @OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, }
+//           , mappedBy = "post")
+//    @Getter
+//    @Setter
+//    private List<Comment> commentList;
 
     public Post(String comment, boolean status, User user) {
         this.comment = comment;
