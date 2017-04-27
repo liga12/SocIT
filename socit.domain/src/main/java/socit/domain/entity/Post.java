@@ -53,12 +53,10 @@ public class Post implements Serializable {
     @Setter
     private User user;
 
-//    @OneToMany(fetch = FetchType.EAGER,  cascade = {CascadeType.MERGE, CascadeType.PERSIST},
-//             mappedBy = "post")
-////    @Fetch(value = FetchMode.SUBSELECT)
-//    @Getter
-//    @Setter
-//    private List<PhotoPost> photoPostList;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "post")
+    @Getter
+    @Setter
+    private List<PhotoPost> photoPostList;
 //
 //    @OneToMany(fetch = FetchType.LAZY,  cascade = {CascadeType.PERSIST, CascadeType.MERGE},
 //             mappedBy = "post")
@@ -76,26 +74,6 @@ public class Post implements Serializable {
         this.comment = comment;
         this.status = status;
         this.user = user;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Post)) {
-            return false;
-        }
-        Post other = (Post) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
     }
 
 }
