@@ -61,6 +61,12 @@ public class User implements UserDetails, GrantedAuthority {
     @Setter
     private List<URLMassage> urlMassages;
 
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user")
+    @Getter
+    @Setter
+    private List<Post> posts;
+
     public User(String login, String password, String firstName, String lastName, String email, Boolean status, String authority) {
         this.login = login;
         this.password = password;

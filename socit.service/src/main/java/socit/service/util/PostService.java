@@ -5,5 +5,5 @@ import socit.service.BaseService;
 
 public interface PostService extends BaseService<Post, Integer> {
 
-    void removeById(Integer id);
+    void remove(Integer id);
 }

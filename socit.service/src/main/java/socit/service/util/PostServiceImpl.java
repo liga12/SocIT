@@ -44,7 +44,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void removeById(Integer id) {
+    public void remove(Integer id) {
         postRepository.delete(id);
     }
 
