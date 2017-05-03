@@ -1,4 +1,4 @@
-package socit.service.util;
+package socit.service.pojo;
 
 import lombok.Getter;
 import lombok.Setter;

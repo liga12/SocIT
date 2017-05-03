@@ -11,9 +11,12 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Properties;
+import java.util.PropertyResourceBundle;
 
 
 @Service
@@ -27,19 +30,14 @@ public class MailerImpl implements Mailer {
     private static final String MAIL_SMTP_PORT = "mail.smtp.port";
     private static final String MAIL_SMTP_TARTTLS_ENABLE = "mail.smtp.starttls.enable";
     private static final String MAIL_SMTP_DEBUG = "mail.smtp.debug";
-    private static final String MAIL_SMTP_SOCKETFACTORY_FULLBACK = "mail.smtp.socketFactory.fallback";
     private static final String FROM = "from";
 
-    @Autowired
-    HtmlToStringImpl htmlToString;
-
     @Override
-    public void send(String to, String URLLocalhost) {
+    public void send(String to, String URLLocalhost, String pathToHTML) {
         log.debug("Email to = " + to);
         log.debug("Email Link to confirmed = " + URLLocalhost);
 
-        //Get properties object
-        ResourcesBandler bandler = new ResourcesBandler("email");
+        ResourcesBandler bandler = new ResourcesBandler("email.properties");
         Properties props = new Properties();
         log.debug("Set properties for email: " + MAIL_SMTP_HOST);
         props.put(MAIL_SMTP_HOST, bandler.getResources(MAIL_SMTP_HOST));
@@ -76,14 +74,14 @@ public class MailerImpl implements Mailer {
 
             MimeMultipart mp = new MimeMultipart();
             BodyPart messageBodyPart = new MimeBodyPart();
-            String str = htmlToString.getEmailStringHtml();
+            String str = new HtmlToString(pathToHTML).getEmailStringHtml();
             String htmlString = MessageFormat.format(str, URLLocalhost);
 
             messageBodyPart.setContent(htmlString, "text/html; charset=utf-8");
             mp.addBodyPart(messageBodyPart);
 
             log.debug("Get html");
-            InputStream resourceAsStream = HtmlToStringImpl.class.getClassLoader()
+            InputStream resourceAsStream = HtmlToString.class.getClassLoader()
                     .getResourceAsStream("images.jpg");
             DataHandler dataHandler = new DataHandler(new InputStreamDataSource(resourceAsStream, "t"));
             messageBodyPart = new MimeBodyPart();

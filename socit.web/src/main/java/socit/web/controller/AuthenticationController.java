@@ -11,8 +11,10 @@ import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.service.URLMassageService;
 import socit.service.UserService;
-import socit.service.util.RegistrationException;
-import socit.service.util.Registrator;
+import socit.service.pojo.Emailer;
+import socit.service.pojo.Passworder;
+import socit.service.exception.RegistrationException;
+import socit.service.pojo.Registrator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +27,8 @@ public class AuthenticationController {
 
     @Autowired
     private URLMassageService urlMassageService;
+
+    private Integer idUser;
 
     @RequestMapping(value = "/")
     public String startPage() {
@@ -69,15 +73,15 @@ public class AuthenticationController {
                                      @RequestParam(value = "passwordConfirmation", required = false) String passwordConfirmation,
                                      @RequestParam(value = "email", required = false) String email,
                                      HttpServletRequest request) {
-        log.debug("Request URL = /registration with parameters: firstName = " + firstName + ", lastName = "+lastName
-                +", login = "+login+", password "+password+", passwordConfirmation = "+passwordConfirmation+", " +
-                "email = "+email);
+        log.debug("Request URL = /registration with parameters: firstName = " + firstName + ", lastName = " + lastName
+                + ", login = " + login + ", password " + password + ", passwordConfirmation = " + passwordConfirmation + ", " +
+                "email = " + email);
         log.debug("Get authentication");
         if (userService.isAuthenticate()) {
             log.debug("Redirect from URL = /user/home");
             return new ModelAndView("redirect:/user/home");
         }
-        ModelAndView modelAndView = new ModelAndView("onEmail");
+        ModelAndView modelAndView = new ModelAndView("onEmailConfirme");
         Registrator registrator = new Registrator(firstName, lastName, login, email, password,
                 passwordConfirmation);
 
@@ -94,11 +98,11 @@ public class AuthenticationController {
             modelAndView.addObject("data", e.getMessage());
             return modelAndView;
         }
-        log.debug("Go to URL = /onEmail");
+        log.debug("Go to URL = /onEmailConfirme");
         return modelAndView;
     }
 
-    @RequestMapping(value = "/emailRegis/*")
+    @RequestMapping(value = "/emailConfirmed/*")
     public ModelAndView emailRegistration(HttpServletRequest request) {
         log.debug("Request URL = /registration");
         log.debug("Get authentication");
@@ -118,6 +122,72 @@ public class AuthenticationController {
         } else {
             modelAndView.addObject("error", "Link not found");
         }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "restorePasswordPage")
+    public String ToRestorePasswordPage() {
+        if (userService.isAuthenticate()) {
+            return "redirect:/user/home";
+        }
+        return "restorePassword";
+    }
+
+    @RequestMapping(value = "/restorePassword")
+    public ModelAndView restorePassword(@RequestParam(value = "email") String email, HttpServletRequest request) {
+        if (userService.isAuthenticate()) {
+            return new ModelAndView("redirect:/user/home");
+        }
+        ModelAndView modelAndView = new ModelAndView("onEmailRestore");
+        try {
+            Emailer emailer = new Emailer(email);
+            userService.restorePassword(emailer, request);
+            String[] emails = email.split("@");
+            String emailClient = emails[1];
+            modelAndView.addObject("host", "https://" + emailClient);
+
+        } catch (RegistrationException e) {
+            modelAndView.setViewName("/restorePassword");
+            modelAndView.addObject("data", e.getMessage());
+            return modelAndView;
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/passwordRestore/*")
+    public ModelAndView checkPasswordRestoreLink(HttpServletRequest request) {
+        if (userService.isAuthenticate()) {
+            return new ModelAndView("redirect:/user/home");
+        }
+        URLMassage urlMassage = urlMassageService.getByUrl(urlMassageService.getURL(request));
+        ModelAndView modelAndView = new ModelAndView("/login");
+        if (urlMassage != null) {
+            idUser = urlMassage.getUser().getId();
+            urlMassageService.remove(urlMassage);
+            return new ModelAndView("newPassword");
+
+        } else {
+            modelAndView.addObject("error", "Link not found");
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/enterNewPassword")
+    public ModelAndView enterNewPassword(@RequestParam(value = "password", required = false) String password,
+                                         @RequestParam(value = "passwordConfirmation", required = false) String passwordConfirmation) {
+        if (userService.isAuthenticate()) {
+            return new ModelAndView("redirect:/user/home");
+        }
+        ModelAndView modelAndView = new ModelAndView("/login");
+        try {
+            Passworder passworder = new Passworder(password, passwordConfirmation);
+            userService.saveNewPassword(passworder, idUser);
+            modelAndView.addObject("error", "Enter the username and password to log on to the website");
+        } catch (RegistrationException e) {
+            modelAndView.setViewName("newPassword");
+            return modelAndView.addObject("error", e.getMessage());
+        }
+        idUser = null;
         return modelAndView;
     }
 

@@ -23,5 +23,5 @@ function editPostCancel(id) {
 }
 
 function editPostSave(id) {
-        $(".a").attr("href", "/post/delete?id="+id+"&comment="+$('#comment').val()+"");
+        $(".a").attr("href", "/post/edit?id="+id+"&comment="+$('#comment').val()+"");
 }

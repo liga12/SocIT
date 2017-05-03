@@ -2,7 +2,10 @@ package socit.service.util;
 
 import lombok.extern.log4j.Log4j;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 @Log4j
@@ -18,8 +21,15 @@ public class ResourcesBandler{
     }
 
     public String getResources(String key) {
-        ResourceBundle emailResources = ResourceBundle.getBundle(file);
-        String value = emailResources.getString(key);
+        InputStream resourceAsStream = HtmlToString.class.getClassLoader()
+                .getResourceAsStream("email.properties");
+        ResourceBundle emailResources = null;
+        try {
+            emailResources = new PropertyResourceBundle(resourceAsStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String value = emailResources != null ? emailResources.getString(key) : null;
         String recoded = null;
         try {
             recoded = new String(value.getBytes(ENCODINGFROM), ENCODINGTO);

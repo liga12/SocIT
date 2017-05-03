@@ -11,9 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.domain.repository.UserRepository;
-import socit.service.util.MailerImpl;
-import socit.service.util.Registrator;
-import socit.service.util.ValidatorAuthentication;
+import socit.service.pojo.Emailer;
+import socit.service.pojo.Passworder;
+import socit.service.pojo.Registrator;
+import socit.service.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ import java.util.List;
 @Log4j
 public class UserServiceImpl implements UserService {
     @Autowired
-    private MailerImpl mailer;
+    private Mailer mailer;
 
     @Autowired
     private URLMassageService urlMassageService;
@@ -82,6 +83,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public User getByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public void registrationUser(Registrator registrator, HttpServletRequest request) {
         String email = registrator.getEmail();
         log.debug("Get validate");
@@ -92,23 +99,42 @@ public class UserServiceImpl implements UserService {
         log.debug("Save User");
         save(user);
         log.debug("Get fullURL by email");
-        String url = getFullUrl(request, email);
+        String url = getFullUrl(request, "/emailConfirmed/",  email);
         log.debug("Full URL = "+url);
         log.debug("Set URLMassage");
         URLMassage urlMassage = new URLMassage(url, user);
         log.debug("Save urlMassage");
         urlMassageService.save(urlMassage);
         log.debug("Send email");
-        mailer.send(email, url);
+        mailer.send(email, url, "emailConfirmedHtml.html");
     }
 
     @Override
-    public String getFullUrl(HttpServletRequest req, String email) {
+    public void restorePassword(Emailer emailer, HttpServletRequest request){
+        validatorAuthenticate.validate(emailer, validatorAuthenticate.getValidator());
+        String email = emailer.getEmail();
+        User user = getByEmail(email);
+        String url = getFullUrl(request,"/passwordRestore/", email);
+        URLMassage urlMassage = new URLMassage(url, user);
+        urlMassageService.save(urlMassage);
+        mailer.send(email, url, "restorePassword.html");
+    }
+
+    @Override
+    public void saveNewPassword(Passworder passworder, Integer userId){
+        validatorAuthenticate.validate(passworder, validatorAuthenticate.getValidator());
+        User user = getById(userId);
+        user.setPassword(passwordEncoder().encode(passworder.getPassword()));
+        update(user);
+    }
+
+    @Override
+    public String getFullUrl(HttpServletRequest req, String host, String email) {
         String scheme = req.getScheme();
         String serverName = req.getServerName();
         return scheme + "://" + serverName +
                 ":" + req.getServerPort() +
-                "/emailRegis/" + passwordEncoder().encode(email);
+                host + passwordEncoder().encode(email);
     }
 
     @Override

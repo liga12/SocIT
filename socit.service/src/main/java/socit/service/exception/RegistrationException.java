@@ -1,4 +1,4 @@
-package socit.service.util;
+package socit.service.exception;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ public class RegistrationException extends RuntimeException {
     @Setter
     private String errorMessage;
 
-    RegistrationException(String errorMessage) {
+    public RegistrationException(String errorMessage) {
         super(errorMessage);
         log.debug("Set message  = " +errorMessage);
     }

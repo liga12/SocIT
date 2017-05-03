@@ -5,7 +5,6 @@
     <title>$Title$</title>
 </head>
 <body>
-<%--<form action="/admin/home" method="post">--%>
 <form action="/login" method="post">
     <table>
         <tr>
@@ -27,7 +26,7 @@
 <form action="/registrationPage" method="get">
     <input type="submit" name="registration" value="Registration"/>
 </form>
-<%--<img src="/st/1.jpg"/>--%>
+<a href="/restorePasswordPage">Forgotten Password</a>
 <img src="/st/userId_37/post_36/1Screenshot from 2017-02-20 19-04-53.png"/>
 <c:out value='${error}'/>
 </body>

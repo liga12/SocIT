@@ -33,9 +33,6 @@ public class UserController {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private PostRepository postRepository;
-
     @Transactional
     @RequestMapping(value = "/user/home")
     public ModelAndView toUserWall() {
@@ -82,7 +79,14 @@ public class UserController {
     public String postDelete(@RequestParam(value = "id") Integer id) {
         postService.remove(id);
         return "redirect:/user/home";
+    }
 
-
+    @RequestMapping(value = "/post/edit")
+    public String postEdit(@RequestParam(value = "id") Integer id,
+                           @RequestParam(value = "comment") String comment) {
+       Post post =  postService.getById(id);
+       post.setComment(comment);
+       postService.update(post);
+        return "redirect:/user/home";
     }
 }
