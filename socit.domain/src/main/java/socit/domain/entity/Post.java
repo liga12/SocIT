@@ -3,6 +3,7 @@ package socit.domain.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 @NoArgsConstructor
+@Log4j
 public class Post implements Serializable {
 
     @Id
@@ -72,6 +74,9 @@ public class Post implements Serializable {
         this.comment = comment;
         this.status = status;
         this.user = user;
+        log.debug("Set values: comment = "+comment+",status = "+status+", User: firstName = " + user.getFirstName() + ", lastName = " + user.getLastName()
+                + ", login = " + user.getLogin() + ", password = " + user.getPassword() + ", email = " + user.getEmail()
+                + "status = " + user.getStatus()+", authority = "+user.getAuthority());
     }
 
 }

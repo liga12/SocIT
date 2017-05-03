@@ -1,5 +1,6 @@
 package socit.service;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Log4j
 public class PhotoPostServiceImpl implements PhotoPostService {
 
     @Autowired
@@ -30,30 +32,38 @@ public class PhotoPostServiceImpl implements PhotoPostService {
     @Override
     @Transactional
     public PhotoPost getById(Integer id) {
+        log.debug("User: id = " + id);
         return photoPostRepository.findOne(id);
     }
 
     @Override
     @Transactional
     public Serializable save(PhotoPost photoPost) {
+        log.debug("PhotoPost:  location = " + photoPost.getLocation() + ", date = " + photoPost.getDate()
+                + ", status = " + photoPost.getStatus());
         return photoPostRepository.saveAndFlush(photoPost);
     }
 
     @Override
     @Transactional
     public void update(PhotoPost photoPost) {
+        log.debug("PhotoPost:  location = " + photoPost.getLocation() + ", date = " + photoPost.getDate()
+                + ", status = " + photoPost.getStatus());
         photoPostRepository.saveAndFlush(photoPost);
     }
 
     @Override
     @Transactional
     public void remove(PhotoPost photoPost) {
+        log.debug("PhotoPost:  location = " + photoPost.getLocation() + ", date = " + photoPost.getDate()
+                + ", status = " + photoPost.getStatus());
         photoPostRepository.delete(photoPost);
     }
 
     @Override
     @Transactional
     public List<PhotoPost> getAll() {
+        log.debug("Get all PhotoPost");
         return photoPostRepository.findAll();
     }
 
@@ -69,6 +79,7 @@ public class PhotoPostServiceImpl implements PhotoPostService {
             for (String s : allUser) {
                 if (s != null) {
                     post.setAllUser(true);
+                    break;
                 }
             }
         }
@@ -86,6 +97,7 @@ public class PhotoPostServiceImpl implements PhotoPostService {
                     BufferedOutputStream stream = new BufferedOutputStream(
                             new FileOutputStream(filePath));
                     stream.write(bytes);
+                    log.debug("Save photo = "+filePath);
                     stream.close();
                     urlImages.add("/st/userId_" + userId + "/post_" + postId + "/" + counter + fileName);
                     counter++;

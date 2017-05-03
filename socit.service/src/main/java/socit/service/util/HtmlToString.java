@@ -19,6 +19,7 @@ public class HtmlToString{
 
     public HtmlToString(String pathToHTML) {
         this.pathToHTML = pathToHTML;
+        log.debug("Set value pathToHTML = "+pathToHTML);
     }
 
     public String getEmailStringHtml() {

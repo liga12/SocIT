@@ -35,6 +35,8 @@ public class URLMassage implements Serializable {
     public URLMassage(String url, User user) {
         this.url = url;
         this.user = user;
-        log.debug("Set values: url = " + url + ", user: login  = "+user.getLogin());
+        log.debug("Set values: url = " + url + ", User: firstName = " + user.getFirstName() + ", lastName = " + user.getLastName()
+                + ", login = " + user.getLogin() + ", password = " + user.getPassword() + ", email = " + user.getEmail()
+                + "status = " + user.getStatus() + ", authority = " + user.getAuthority());
     }
 }

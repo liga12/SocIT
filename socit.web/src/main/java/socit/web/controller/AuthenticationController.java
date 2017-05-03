@@ -11,9 +11,9 @@ import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.service.URLMassageService;
 import socit.service.UserService;
+import socit.service.exception.RegistrationException;
 import socit.service.pojo.Emailer;
 import socit.service.pojo.Passworder;
-import socit.service.exception.RegistrationException;
 import socit.service.pojo.Registrator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +48,7 @@ public class AuthenticationController {
         }
         if (error != null) {
             model.addObject("error", "Invalid login or password");
-            log.debug("Invalid login or password");
+            log.error("Invalid login or password");
         }
         log.debug("Go to URL = login");
         return model;
@@ -82,6 +82,7 @@ public class AuthenticationController {
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("onEmailConfirme");
+        log.debug("Set Registrator");
         Registrator registrator = new Registrator(firstName, lastName, login, email, password,
                 passwordConfirmation);
 
@@ -121,26 +122,36 @@ public class AuthenticationController {
                     + " Enter the username and password to log on to the website");
         } else {
             modelAndView.addObject("error", "Link not found");
+            log.error("Error = Link not found: "+request);
         }
+        log.debug("Go to URL = /login");
         return modelAndView;
     }
 
     @RequestMapping(value = "restorePasswordPage")
     public String ToRestorePasswordPage() {
+        log.debug("Request URL = /restorePasswordPage");
+        log.debug("Get authentication");
         if (userService.isAuthenticate()) {
+            log.debug("Redirect from URL = /user/home");
             return "redirect:/user/home";
         }
+        log.debug("Go to URL = /restorePassword");
         return "restorePassword";
     }
 
     @RequestMapping(value = "/restorePassword")
     public ModelAndView restorePassword(@RequestParam(value = "email") String email, HttpServletRequest request) {
+        log.debug("Request URL = /restorePasswordPage with value = " + email);
+        log.debug("Get authentication");
         if (userService.isAuthenticate()) {
+            log.debug("Redirect from URL = /user/home");
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("onEmailRestore");
+        log.debug("Set Emailer");
+        Emailer emailer = new Emailer(email);
         try {
-            Emailer emailer = new Emailer(email);
             userService.restorePassword(emailer, request);
             String[] emails = email.split("@");
             String emailClient = emails[1];
@@ -148,15 +159,20 @@ public class AuthenticationController {
 
         } catch (RegistrationException e) {
             modelAndView.setViewName("/restorePassword");
+            log.error(e.getMessage());
+            log.debug("Go to URL = /restorePassword");
             modelAndView.addObject("data", e.getMessage());
             return modelAndView;
         }
+        log.debug("Go to URL = /onEmailRestore");
         return modelAndView;
     }
 
     @RequestMapping(value = "/passwordRestore/*")
     public ModelAndView checkPasswordRestoreLink(HttpServletRequest request) {
+        log.debug("Request URL = /passwordRestore/*");
         if (userService.isAuthenticate()) {
+            log.debug("Redirect from URL = /user/home");
             return new ModelAndView("redirect:/user/home");
         }
         URLMassage urlMassage = urlMassageService.getByUrl(urlMassageService.getURL(request));
@@ -168,14 +184,18 @@ public class AuthenticationController {
 
         } else {
             modelAndView.addObject("error", "Link not found");
+            log.error("Error = Link not found: "+request);
         }
+        log.debug("Go to URL = /newPassword");
         return modelAndView;
     }
 
     @RequestMapping(value = "/enterNewPassword")
     public ModelAndView enterNewPassword(@RequestParam(value = "password", required = false) String password,
                                          @RequestParam(value = "passwordConfirmation", required = false) String passwordConfirmation) {
+        log.debug("Request URL = /enterNewPassword");
         if (userService.isAuthenticate()) {
+            log.debug("Redirect from URL = /user/home");
             return new ModelAndView("redirect:/user/home");
         }
         ModelAndView modelAndView = new ModelAndView("/login");
@@ -185,9 +205,12 @@ public class AuthenticationController {
             modelAndView.addObject("error", "Enter the username and password to log on to the website");
         } catch (RegistrationException e) {
             modelAndView.setViewName("newPassword");
+            log.error(e.getMessage());
+            log.debug("Go to URL = /newPassword");
             return modelAndView.addObject("error", e.getMessage());
         }
         idUser = null;
+        log.debug("Go to URL = /login");
         return modelAndView;
     }
 

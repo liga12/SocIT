@@ -1,5 +1,6 @@
 package socit.service;
 
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Service
+@Log4j
 public class URLMassageServiceImpl implements URLMassageService {
 
     @Autowired
@@ -19,41 +21,48 @@ public class URLMassageServiceImpl implements URLMassageService {
     @Override
     @Transactional
     public URLMassage getById(Integer id) {
+        log.debug("URLMassage: id = " + id);
         return urlMessageRepository.findOne(id);
     }
 
     @Override
     @Transactional
     public Serializable save(URLMassage urlMassage) {
+        log.debug("URLMassage: url = " + urlMassage.getUrl());
         return urlMessageRepository.saveAndFlush(urlMassage);
     }
 
     @Override
     @Transactional
     public void update(URLMassage urlMassage) {
+        log.debug("URLMassage: url = " + urlMassage.getUrl());
         urlMessageRepository.saveAndFlush(urlMassage);
     }
 
     @Override
     @Transactional
     public void remove(URLMassage urlMassage) {
+        log.debug("URLMassage: url = " + urlMassage.getUrl());
         urlMessageRepository.delete(urlMassage);
     }
 
     @Override
     @Transactional
     public void remove(Integer id) {
+        log.debug("URLMassage: id = " + id);
         urlMessageRepository.delete(id);
     }
 
     @Override
     public List<URLMassage> getAll() {
+        log.debug("URLMassage all User");
         return urlMessageRepository.findAll();
     }
 
     @Override
     @Transactional
     public URLMassage getByUrl(String url) {
+        log.debug("URLMassage: url = " + url);
         return urlMessageRepository.findByUrl(url);
     }
 
@@ -81,6 +90,7 @@ public class URLMassageServiceImpl implements URLMassageService {
         if (queryString != null) {
             url.append("?").append(queryString);
         }
+        log.debug("Url = "+url.toString());
         return url.toString();
     }
 

@@ -2,11 +2,13 @@ package socit.service.pojo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@Log4j
 public class Emailer {
 
     private final String EMAIL_PATTERN =
@@ -22,5 +24,6 @@ public class Emailer {
 
     public Emailer(String email) {
         this.email = email;
+        log.debug("Set value email = " + email);
     }
 }

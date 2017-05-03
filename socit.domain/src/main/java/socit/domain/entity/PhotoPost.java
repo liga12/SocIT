@@ -3,6 +3,7 @@ package socit.domain.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.Date;
 @Entity
 @Table(name = "photo_post")
 @NoArgsConstructor
+@Log4j
 public class PhotoPost implements Serializable {
 
     @Id
@@ -46,5 +48,7 @@ public class PhotoPost implements Serializable {
         this.location = location;
         this.status = status;
         this.post = post;
+        log.debug("Set values: location = " + location + ", status" +", Post: like = "+post.getLike()+", date = "+post.getDate()
+                +", ststus = "+post.getStatus()+", comment = "+post.getComment()+", allUser = "+post.getAllUser());
     }
 }

@@ -77,7 +77,9 @@ public class UserController {
 
     @RequestMapping(value = "/post/delete")
     public String postDelete(@RequestParam(value = "id") Integer id) {
-        postService.remove(id);
+        Post post = postService.getById(id);
+        post.setStatus(false);
+        postService.update(post);
         return "redirect:/user/home";
     }
 
