@@ -3,35 +3,22 @@
 <html>
 <head>
     <title>$Title$</title>
+    <link href="/static/css/registration.css" rel="stylesheet">
 </head>
-<body>
-<form action="/registration"  modelattribute="user" method="post">
-    <table>
-        <tr>
-            <td><input type="text" placeholder="Enter firstName" required name="firstName"/></td>
-        </tr>
-        <tr>
-            <td><input type="text" placeholder="Enter lastName" required name="lastName"/></td>
-        </tr>
-        <tr>
-            <td><input type="text" placeholder="Enter email" required name="email"/></td>
-        </tr>
-        <tr>
-            <td><input type="text" placeholder="Enter login" required name="login"/></td>
-        </tr>
-        <tr>
-            <td><input type="password" placeholder="Enter password" required name="password"/></td>
-        </tr>
-        <tr>
-            <td><input type="password" placeholder="Enter password confirmation" required name="passwordConfirmation"/></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" name="registration" value="Registration"/>
-            </td>
-        </tr>
-    </table>
-</form>
-<c:out value="${data}"/>
+<div class="header">
+    SocIT
+</div>
+<div class="wall">
+    <form action="/registration" modelattribute="user" method="post">
+        <input type="text" placeholder="First Name" required name="firstName"/>
+        <input type="text" placeholder="Last Name" required name="lastName"/>
+        <input type="text" placeholder="Email" required name="email"/>
+        <input type="text" placeholder="Login" required name="login"/>
+        <input type="password" placeholder="Password" required name="password"/>
+        <input type="password" placeholder="Password" required name="passwordConfirmation"/>
+        <input class="bottom" type="submit" name="registration" value="Registration"/>
+    </form>
+    <p><c:out value="${data}"/></p>
+</div>
 </body>
 </html>
