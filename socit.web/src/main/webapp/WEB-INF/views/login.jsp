@@ -3,31 +3,33 @@
 <html>
 <head>
     <title>$Title$</title>
+    <link href="/static/css/mainPage.css" rel="stylesheet">
 </head>
 <body>
-<form action="/login" method="post">
-    <table>
-        <tr>
-            <td><label for="login">Login</label></td>
-            <td><input type="text" placeholder="Enter login" required name="login" id="login"/></td>
-        </tr>
+<div class="header">
+    SocIT
+</div>
+<div class="wall">
+    <div class="left">
+        <div class="authentication_form">
+            <div class="authentication_header">
+                <p>Login</p>
+                <a class="link" href="/registrationPage">Registration</a>
+            </div>
+            <div class="authentication_input">
+                <form action="/login" method="post">
+                    <input type="text" placeholder="Login" required name="login" id="login"/>
+                    <input type="password" placeholder="Password" required name="password" id="password"/>
+                    <input class="bottom" type="submit" name="enter" value="Sing In"/>
+                </form>
+                <a class="link" href="/restorePasswordPage">Forgotten Password</a>
+            </div>
+            <c:out value='${error}'/>
+        </div>
 
-        <tr>
-            <td><label for="password">Password</label></td>
-            <td><input type="password" placeholder="Enter password" required name="password" id="password"/></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" name="enter" value="Login"/>
-            </td>
-        </tr>
-    </table>
-</form>
-<form action="/registrationPage" method="get">
-    <input type="submit" name="registration" value="Registration"/>
-</form>
-<a href="/restorePasswordPage">Forgotten Password</a>
-<img src="/st/userId_37/post_36/1Screenshot from 2017-02-20 19-04-53.png"/>
-<c:out value='${error}'/>
+    </div>
+    <div class="right"><img src="/static/images/main.jpg"></div>
+</div>
+
 </body>
 </html>
