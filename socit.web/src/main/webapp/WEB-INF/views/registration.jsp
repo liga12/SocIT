@@ -5,9 +5,7 @@
     <title>$Title$</title>
     <link href="/static/css/registration.css" rel="stylesheet">
 </head>
-<div class="header">
-    SocIT
-</div>
+<%@include file="header.jsp"%>
 <div class="wall">
     <form action="/registration" modelattribute="user" method="post">
         <input type="text" placeholder="First Name" required name="firstName"/>

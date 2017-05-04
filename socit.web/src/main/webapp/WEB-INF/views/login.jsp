@@ -6,9 +6,7 @@
     <link href="/static/css/mainPage.css" rel="stylesheet">
 </head>
 <body>
-<div class="header">
-    SocIT
-</div>
+<%@include file="header.jsp"%>
 <div class="wall">
     <div class="left">
         <div class="authentication_form">

@@ -12,12 +12,6 @@ input {
     text-align: center;
 }
 
-.header {
-    height: 40px;
-    background-color: #009788;
-    font-size: 30px;
-}
-
 .wall , form {
     display: flex;
     margin-top: 20px;

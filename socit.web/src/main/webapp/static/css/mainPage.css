@@ -16,11 +16,11 @@ img{
     width: 100%;
 }
 
-.header {
-    height: 40px;
-    background-color: #009788;
-    font-size: 30px;
-}
+/*.header {*/
+    /*height: 40px;*/
+    /*background-color: #009788;*/
+    /*font-size: 30px;*/
+/*}*/
 
 .wall {
     display: flex;
