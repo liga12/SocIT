@@ -1,0 +1,17 @@
+body {
+    margin: 0;
+    background-color: #1d262b;
+    color: white;
+}
+
+.wall  {
+    display: flex;
+    margin-top: 20px;
+    flex-direction: column;
+    align-items: center;
+}
+a{
+    text-decoration: none;
+    color: #009788;
+}
+

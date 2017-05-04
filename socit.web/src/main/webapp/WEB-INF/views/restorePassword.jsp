@@ -3,20 +3,17 @@
 <html>
 <head>
     <title>Title</title>
+    <link href="/static/css/restorePassword.css" rel="stylesheet">
 </head>
 <body>
-<form action="/restorePassword" modelattribute="user" method="post">
-    <table>
-        <tr>
-            <td><input type="text" placeholder="Enter email" required name="email"/></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" name="registration" value="Go"/>
-            </td>
-        </tr>
-    </table>
-</form>
-<c:out value="${data}"/>
+<%@ include file="header.jsp" %>
+<div class="wall">
+    <form action="/restorePassword" modelattribute="user" method="post">
+        <input type="text" placeholder="Email" required name="email"/></td>
+        <input class="bottom" type="submit" name="registration" value="Go"/>
+    </form>
+    <c:out value="${data}"/>
+</div>
+
 </body>
 </html>

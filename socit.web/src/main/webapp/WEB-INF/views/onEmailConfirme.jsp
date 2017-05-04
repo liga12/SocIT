@@ -2,9 +2,12 @@
 <html>
 <head>
     <title>confirm</title>
-   <p>go to mail to confirm your registration   <a href="${host}">${host}</a></p>
+    <link href="/static/css/onEmailConfirme.css" rel="stylesheet">
 </head>
 <body>
-
+<%@include file="header.jsp" %>
+<div class="wall">
+    <p>Go to mail to confirm your registration <a href="${host}">${host}</a></p>
+</div>
 </body>
 </html>

@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     public Serializable save(User user) {
         log.debug("User: firstName = " + user.getFirstName() + ", lastName = " + user.getLastName()
                 + ", login = " + user.getLogin() + ", password = " + user.getPassword() + ", email = " + user.getEmail()
-                + "status = " + user.getStatus()+", authority = "+user.getAuthority());
+                + "status = " + user.getStatus() + ", authority = " + user.getAuthority());
         return userRepository.saveAndFlush(user);
     }
 
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
         log.debug("User: firstName = " + user.getFirstName() + ", lastName = " + user.getLastName()
                 + ", login = " + user.getLogin() + ", password = " + user.getPassword() + ", email = " + user.getEmail()
-                + "status = " + user.getStatus()+", authority = "+user.getAuthority());
+                + "status = " + user.getStatus() + ", authority = " + user.getAuthority());
         userRepository.saveAndFlush(user);
     }
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     public void remove(User user) {
         log.debug("User: firstName = " + user.getFirstName() + ", lastName = " + user.getLastName()
                 + ", login = " + user.getLogin() + ", password = " + user.getPassword() + ", email = " + user.getEmail()
-                + "status = " + user.getStatus()+", authority = "+user.getAuthority());
+                + "status = " + user.getStatus() + ", authority = " + user.getAuthority());
         userRepository.delete(user);
     }
 
@@ -79,28 +79,28 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Boolean existsByLogin(String login) {
-        log.debug("Login = "+login);
+        log.debug("Login = " + login);
         return userRepository.existsByLogin(login);
     }
 
     @Override
     @Transactional
     public Boolean existsByEmail(String email) {
-        log.debug("Email = "+email);
+        log.debug("Email = " + email);
         return userRepository.existsByEmail(email);
     }
 
     @Override
     @Transactional
     public User getByLogin(String login) {
-        log.debug("Login = "+login);
+        log.debug("Login = " + login);
         return userRepository.findByLogin(login);
     }
 
     @Override
     @Transactional
     public User getByEmail(String email) {
-        log.debug("Email = "+email);
+        log.debug("Email = " + email);
         return userRepository.findByEmail(email);
     }
 
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getFullUrl(HttpServletRequest req, String host, String email) {
-        log.debug("host = "+host+", email = "+email);
+        log.debug("host = " + host + ", email = " + email);
         String scheme = req.getScheme();
         String serverName = req.getServerName();
         return scheme + "://" + serverName +
@@ -156,7 +156,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean isAuthenticate() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal != null && principal instanceof User) {
+        if (principal != null && principal instanceof User && ((User) principal).getStatus()) {
             log.debug("Authentication success");
             return true;
         } else {
