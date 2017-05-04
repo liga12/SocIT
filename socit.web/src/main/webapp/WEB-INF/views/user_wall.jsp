@@ -11,40 +11,18 @@
     <script src="/static/js/textarea_posts.js"></script>
     <script src="/static/js/edit_post.js"></script>
     <script src="/static/js/dropdown_menu.js"></script>
-
-
+    <script src="/static/js/bsSliserMulti.js"></script>
     <script src="/static/js/jquery.bxslider.js"></script>
+
     <link href="/static/css/jquery.bxslider.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="/static/css/wall.css"/>
-    <script>
-
-        $(document).ready(function () {
-            var myArray = $('.bxslider');
-            $.each(myArray, function () {
-                $('#' + $(this).attr('id')).bxSlider({});
-            });
-        });
-
-    </script>
-    <style>
-
-    </style>
 </head>
 <body>
-<div class="header">
-    <a class="name_company" href="">SocIT</a>
-    <a class="exit" href="/logout">EXIT</a>
-</div>
-<div class="table">
-    <div class="left">
-        <a class="menu" href="">avatar</a>
-        <a class="menu" href="">bookmark</a>
-        <a class="menu" href="">friends</a>
-        <a class="menu" href="">setting</a>
-        <a class="menu" href="">news</a>
-    </div>
+<%@include file="headerWithLogout.jsp"%>
+<div class="wall">
+    <%@include file="menu.jsp"%>
     <div class="right">
-        <div class="wall">
+        <div class="main_wall">
             <c:set value="${user.firstName} ${user.lastName}" var="userName"/>
             <div class="information">${userName}</div>
             <div class="post">
@@ -62,11 +40,13 @@
                 <div class="posts" id="${lis.id}">
                     <div class="post_header">
                         <div class="post_avatar">
-                            <img src="../css/images.jpg">
+                            <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRO9769VCMzOZngytdMBmCJTlyV14UxcnChZ8R3CAnBVIJpAUOT">
                         </div>
                         <div class="post_data">
                             <div class="name">${userName}</div>
-                            <div class="date"><c:out value="${lis.date}"/></div>
+                            <div class="date">1
+                                <c:out value="${lis.date}"/>
+                            </div>
                         </div>
                         <div class="function" id="function${lis.id}">
                             <li class="ranksSubmenuItem" style="list-style: none">
@@ -94,39 +74,12 @@
                             </div>
                         </div>
                     </c:if>
-                    <%--<c:forEach items="${lis.commentList}" var="liss">--%>
-                        <%--<div class="post_comments">--%>
-                            <%--<div class="post_comments_header">--%>
-                                <%--<div class="post_comments_avatar">--%>
-                                    <%--<img src="images.jpg">--%>
-                                <%--</div>--%>
-                                <%--<div class="post_comments_data">--%>
-                                    <%--<div class="name">Jack</div>--%>
-                                    <%--<div class="date">--%>
-                                        <%--23 2017"/>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-                                <%--<div class="post_comments_function" id="function${lis.id}">--%>
-                                    <%--<li class="ranksSubmenuItem" style="list-style: none">--%>
-                                        <%--<a class="sub" href="/post?id=${lis.id}" id="B">Delete</a>--%>
-                                    <%--</li>--%>
-                                <%--</div>--%>
-                            <%--</div>--%>
-                            <%--<div class="comments">${liss.text}</div>--%>
-                        <%--</div>--%>
-                    <%--</c:forEach>--%>
-                    <%--<div class="commentsAdd">--%>
-                    <%--<textarea class='autoExpand' rows='2' data-min-rows='2'--%>
-                              <%--placeholder='Enter text'></textarea>--%>
-                        <%--<input type="button" value="Send">--%>
-                    <%--</div>--%>
                 </div>
             </c:forEach>
         </div>
-
-        <div class="avatar">
-            <img src="../css/images.jpg">
-        </div>
+    </div>
+    <div class="avatar">
+        <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRO9769VCMzOZngytdMBmCJTlyV14UxcnChZ8R3CAnBVIJpAUOT">
     </div>
 </div>
 </body>

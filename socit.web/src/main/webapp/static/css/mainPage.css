@@ -13,7 +13,7 @@ input {
 }
 
 img{
-    width: 100%;
+    width: 80%;
 }
 .wall {
     display: flex;
@@ -46,10 +46,13 @@ img{
     margin: 10px;
     text-align: center;
 }
+.authentication_form input{
+    width: 90%;
+}
 
 .bottom{
     background-color: #009788;
-    width: 100%;
+    /*width: 90%;*/
     color: white;
 }
 

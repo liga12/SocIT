@@ -1,0 +1,14 @@
+.left {
+    display: flex;
+    flex-direction: column;
+    text-transform: uppercase;
+    align-items: flex-end;
+    min-width: 100px;
+    flex-basis: 100px;
+
+}
+
+.left a {
+    color: #009788;
+    margin: 7px;
+}

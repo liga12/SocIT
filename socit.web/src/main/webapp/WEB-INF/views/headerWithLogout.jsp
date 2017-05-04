@@ -2,11 +2,12 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="/static/css/header.css" rel="stylesheet">
+    <link href="/static/css/headerWithLogout.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="header">
     <div class="header_logo">SocIT</div>
+    <a class="exit" href="/logout">EXIT</a>
 </div>
 </body>
 </html>
