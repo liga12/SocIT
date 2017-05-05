@@ -13,6 +13,7 @@
     <script src="/static/js/dropdown_menu.js"></script>
     <script src="/static/js/bsSliserMulti.js"></script>
     <script src="/static/js/jquery.bxslider.js"></script>
+    <script src="/static/js/limitUpload.js"></script>
 
     <link href="/static/css/jquery.bxslider.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="/static/css/wall.css"/>
@@ -25,14 +26,14 @@
         <div class="main_wall">
             <div class="information">${user.firstName} ${user.lastName}</div>
             <div class="post">
-                <form action="/uploadFile" method="post"
+                <form action="/uploadFile" method="post" id="send"
                       enctype="multipart/form-data">
                     <div class="post_avatar"></div>
                     <input type="checkbox" name="all" value="al">By all
                     <textarea class='autoExpand' rows='2' data-min-rows='2'
                               placeholder='Enter text' name="description"></textarea>
                     <p><input type="file" name="file" multiple accept="image/*,image/jpeg">
-                        <input type="submit" value="Send"></p>
+                        <input type="submit" value="Send""></p>
                 </form>
             </div>
             <c:forEach items="${requestScope.list}" var="lis">
