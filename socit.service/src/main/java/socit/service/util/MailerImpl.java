@@ -2,7 +2,6 @@ package socit.service.util;
 
 
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.activation.DataHandler;
@@ -11,12 +10,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.Properties;
-import java.util.PropertyResourceBundle;
 
 
 @Service
@@ -82,7 +78,7 @@ public class MailerImpl implements Mailer {
 
             log.debug("Get html");
             InputStream resourceAsStream = HtmlToString.class.getClassLoader()
-                    .getResourceAsStream("email1.jpg");
+                    .getResourceAsStream("email.jpg");
             DataHandler dataHandler = new DataHandler(new InputStreamDataSource(resourceAsStream, "t"));
             messageBodyPart = new MimeBodyPart();
             messageBodyPart.setDataHandler(dataHandler);

@@ -31,15 +31,6 @@ public class AuthenticationController {
 
     private Integer idUser;
 
-    @Autowired
-    Mailer mailer;
-
-    @RequestMapping(value = "/email")
-    public String em(){
-        mailer.send("ligalauz12@gmail.com", "http://localhost:8080/emailConfirmed/71e05ea86e7ae6182b25978dcb393d20 ", "emailConfirmedHtml.html");
-        return "login";
-    }
-
     @RequestMapping(value = "/")
     public String startPage() {
         log.debug("Request URL = /");
