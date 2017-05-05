@@ -33,7 +33,7 @@
                     <textarea class='autoExpand' rows='2' data-min-rows='2'
                               placeholder='Enter text' name="description"></textarea>
                     <p><input type="file" name="file" multiple accept="image/*,image/jpeg">
-                        <input type="submit" value="Send""></p>
+                        <input type="submit" value="Send"></p>
                 </form>
             </div>
             <c:forEach items="${requestScope.list}" var="lis">

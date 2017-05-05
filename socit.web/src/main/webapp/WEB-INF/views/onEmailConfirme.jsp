@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>confirm</title>
-    <link href="/static/css/onEmailConfirme.css" rel="stylesheet">
+    <link href="/static/css/onEmail.css" rel="stylesheet">
 </head>
 <body>
 <%@include file="header.jsp" %>
