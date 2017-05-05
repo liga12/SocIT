@@ -111,7 +111,8 @@ public class UserServiceImpl implements UserService {
         validatorAuthenticate.validate(registrator, validatorAuthenticate.getValidator());
         log.debug("Set User");
         User user = new User(registrator.getLogin(), passwordEncoder().encode(registrator.getPassword()),
-                registrator.getFirstName(), registrator.getLastName(), email, false, "ROLE_USER");
+                registrator.getFirstName(), registrator.getLastName(), email, false, "ROLE_USER",
+                "/static/images/default_avatar.jpg");
         save(user);
         String url = getFullUrl(request, "/emailConfirmed/", email);
         log.debug("Full URL = " + url);

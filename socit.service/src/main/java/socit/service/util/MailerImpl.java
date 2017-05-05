@@ -82,7 +82,7 @@ public class MailerImpl implements Mailer {
 
             log.debug("Get html");
             InputStream resourceAsStream = HtmlToString.class.getClassLoader()
-                    .getResourceAsStream("email.jpg");
+                    .getResourceAsStream("email1.jpg");
             DataHandler dataHandler = new DataHandler(new InputStreamDataSource(resourceAsStream, "t"));
             messageBodyPart = new MimeBodyPart();
             messageBodyPart.setDataHandler(dataHandler);

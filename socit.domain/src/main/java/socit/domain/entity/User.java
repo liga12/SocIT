@@ -58,6 +58,11 @@ public class User implements UserDetails, GrantedAuthority {
     @Setter
     private String authority;
 
+    @Column(name = "avatar")
+    @Setter
+    @Getter
+    private String avatar;
+
     @OneToMany(mappedBy = "user")
     @Getter
     @Setter
@@ -69,7 +74,8 @@ public class User implements UserDetails, GrantedAuthority {
     @Setter
     private List<Post> posts;
 
-    public User(String login, String password, String firstName, String lastName, String email, Boolean status, String authority) {
+    public User(String login, String password, String firstName, String lastName, String email, Boolean status,
+                String authority, String avatar) {
         this.login = login;
         this.password = password;
         this.firstName = firstName;
@@ -77,8 +83,10 @@ public class User implements UserDetails, GrantedAuthority {
         this.email = email;
         this.status = status;
         this.authority = authority;
-        log.debug("Set values: firstName = "+firstName+", lastName = "+lastName+", email = "+email
-                +", login = "+login+", password = "+password+", status = "+status+", authority = "+authority);
+        this.avatar = avatar;
+        log.debug("Set values: firstName = " + firstName + ", lastName = " + lastName + ", email = " + email
+                + ", login = " + login + ", password = " + password + ", status = " + status + ", authority = " + authority
+                + ", avatar = " + avatar);
     }
 
     @Override

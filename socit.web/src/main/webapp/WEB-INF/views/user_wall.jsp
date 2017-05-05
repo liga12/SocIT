@@ -23,8 +23,7 @@
     <%@include file="menu.jsp"%>
     <div class="right">
         <div class="main_wall">
-            <c:set value="${user.firstName} ${user.lastName}" var="userName"/>
-            <div class="information">${userName}</div>
+            <div class="information">${user.firstName} ${user.lastName}</div>
             <div class="post">
                 <form action="/uploadFile" method="post"
                       enctype="multipart/form-data">
@@ -40,11 +39,11 @@
                 <div class="posts" id="${lis.id}">
                     <div class="post_header">
                         <div class="post_avatar">
-                            <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRO9769VCMzOZngytdMBmCJTlyV14UxcnChZ8R3CAnBVIJpAUOT">
+                            <img src="${user.avatar}">
                         </div>
                         <div class="post_data">
                             <div class="name">${userName}</div>
-                            <div class="date">1
+                            <div class="date">
                                 <c:out value="${lis.date}"/>
                             </div>
                         </div>
@@ -79,7 +78,7 @@
         </div>
     </div>
     <div class="avatar">
-        <img src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcRO9769VCMzOZngytdMBmCJTlyV14UxcnChZ8R3CAnBVIJpAUOT">
+        <img src="${user.avatar}">
     </div>
 </div>
 </body>

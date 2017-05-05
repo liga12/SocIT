@@ -15,6 +15,7 @@ import socit.service.exception.RegistrationException;
 import socit.service.pojo.Emailer;
 import socit.service.pojo.Passworder;
 import socit.service.pojo.Registrator;
+import socit.service.util.Mailer;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,6 +30,15 @@ public class AuthenticationController {
     private URLMassageService urlMassageService;
 
     private Integer idUser;
+
+    @Autowired
+    Mailer mailer;
+
+    @RequestMapping(value = "/email")
+    public String em(){
+        mailer.send("ligalauz12@gmail.com", "http://localhost:8080/emailConfirmed/71e05ea86e7ae6182b25978dcb393d20 ", "emailConfirmedHtml.html");
+        return "login";
+    }
 
     @RequestMapping(value = "/")
     public String startPage() {
