@@ -2,9 +2,11 @@
 <html>
 <head>
     <title>Title</title>
+    <link href="/static/css/onEmailConfirme.css" rel="stylesheet">
 </head>
 <body>
-<title>confirm</title>
-<p>go to mail to restore password <a href="${host}">${host}</a></p>
+<div class="wall">
+    <p>Go to mail to restore password <a href="${host}">${host}</a></p>
+</div>
 </body>
 </html>

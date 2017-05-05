@@ -12,16 +12,20 @@ input {
     text-align: center;
 }
 
-.wall , form {
+.wall, form {
     display: flex;
     margin-top: 20px;
     flex-direction: column;
     align-items: center;
 }
 
-.bottom{
+.bottom {
     width: 100%;
     background-color: #009788;
     color: white;
+}
+
+label.error {
+    color: red;
 }
 
