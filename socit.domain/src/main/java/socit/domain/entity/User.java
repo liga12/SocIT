@@ -8,9 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -63,6 +61,21 @@ public class User implements UserDetails, GrantedAuthority {
     @Getter
     private String avatar;
 
+    @Column(name = "city")
+    @Setter
+    @Getter
+    private String city;
+
+    @Column(name = "date")
+    @Setter
+    @Getter
+    private Calendar date;
+
+    @Getter
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private GENDER GENDER;
+
     @OneToMany(mappedBy = "user")
     @Getter
     @Setter
@@ -88,6 +101,8 @@ public class User implements UserDetails, GrantedAuthority {
                 + ", login = " + login + ", password = " + password + ", status = " + status + ", authority = " + authority
                 + ", avatar = " + avatar);
     }
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

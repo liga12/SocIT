@@ -17,7 +17,9 @@ import socit.service.PostService;
 import socit.service.UserService;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +46,11 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView("user_wall");
         if (user.getStatus()) {
             modelAndView.addObject("user", user);
-
+            Calendar date = user.getDate();
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            if (date!=null) {
+                modelAndView.addObject("date", formatter.format(date.getTime()));
+            }
             List<Post> listPost = new ArrayList<>();
             List<Post> lists = user.getPosts();
             if (lists != null) {
@@ -67,10 +73,12 @@ public class UserController {
     public String uploadImage(@RequestParam("description") String description,
                               @RequestParam(value = "all", required = false) String[] allUser,
                               @RequestParam("file") MultipartFile[] myFile) {
-        try {
-            photoPostService.savePhotoPost(description, allUser, myFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (description!=null&&myFile[0].getSize()>0){
+            try {
+                photoPostService.savePhotoPost(description, allUser, myFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return "redirect:/user/home";
     }

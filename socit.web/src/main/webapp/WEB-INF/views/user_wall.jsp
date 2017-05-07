@@ -24,7 +24,10 @@
     <%@include file="menu.jsp"%>
     <div class="right">
         <div class="main_wall">
-            <div class="information">${user.firstName} ${user.lastName}</div>
+            <div class="information">${user.firstName} ${user.lastName}<br><br>
+                City: ${user.city}<br>
+                Date Of Birth: ${date}<br>
+            </div>
             <div class="post">
                 <form action="/uploadFile" method="post" id="send"
                       enctype="multipart/form-data">
@@ -78,9 +81,7 @@
             </c:forEach>
         </div>
     </div>
-    <div class="avatar">
-        <img src="${user.avatar}">
-    </div>
+    <%@include file="avatar.jsp"%>
 </div>
 </body>
 </html>

@@ -1,0 +1,15 @@
+.avatar {
+    display: flex;
+    flex-direction: column;
+    background-color: #33444e;
+    margin-left: 20px;
+    width: 15%;
+    min-width: 200px;
+    height: 300px;
+}
+
+img {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}

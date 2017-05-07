@@ -8,18 +8,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import socit.domain.entity.GENDER;
 import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.domain.repository.UserRepository;
-import socit.service.pojo.Emailer;
-import socit.service.pojo.Passworder;
-import socit.service.pojo.Registrator;
+import socit.service.pojo.*;
 import socit.service.util.Mailer;
 import socit.service.util.ValidatorAuthentication;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Log4j
@@ -92,6 +91,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    public Boolean existsByPassword(String password) {
+        log.debug("Password = " + password);
+        return userRepository.existsByPassword(passwordEncoder().encode(password));
+    }
+
+    @Override
+    @Transactional
     public User getByLogin(String login) {
         log.debug("Login = " + login);
         return userRepository.findByLogin(login);
@@ -142,6 +148,91 @@ public class UserServiceImpl implements UserService {
         User user = getById(userId);
         user.setPassword(passwordEncoder().encode(passworder.getPassword()));
         update(user);
+    }
+
+    public void savePassword(ChangerPassword changerPassword) {
+        validatorAuthenticate.validate(changerPassword, validatorAuthenticate.getValidator());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        user.setPassword(passwordEncoder().encode(changerPassword.getPassword()));
+        update(user);
+    }
+
+    @Override
+    public Map<String, List<String>> getCalendarData() {
+        Map<String, List<String>> collections = new LinkedHashMap<>();
+        List<String> days = getCollection(1, 32);
+        List<String> months = getCollection(1, 13);
+        Calendar calendar = Calendar.getInstance();
+        int currentYear = calendar.get(Calendar.YEAR);
+        List<String> years = getCollection(currentYear - 100, currentYear - 9);
+        for (int i = currentYear - 100; i < currentYear - 9; i++) {
+            years.add(String.valueOf(i));
+        }
+        collections.put("days", days);
+        collections.put("months", months);
+        collections.put("years", years);
+        return collections;
+
+    }
+
+    @Override
+    public Map<String, String> getUserDate(User user) {
+        Map<String, String> map = new LinkedHashMap<>();
+        Calendar date = user.getDate();
+        if (date != null) {
+            map.put("day", String.valueOf(date.get(Calendar.DAY_OF_MONTH)));
+            map.put("month", String.valueOf(date.get(Calendar.MONTH) + 1));
+            map.put("year", String.valueOf(date.get(Calendar.YEAR)));
+        }
+        return map;
+    }
+
+    @Override
+    public List<String> getCollection(int startNumber, int finishNumber) {
+        List<String> collection = new ArrayList<>();
+        for (int i = startNumber; i < finishNumber; i++) {
+            collection.add(String.valueOf(i));
+        }
+        return collection;
+    }
+
+    @Override
+    public void setSetting(Settinger setting, User user, String gender, String[] day, String[] month, String[] year ) {
+        validatorAuthenticate.validate(setting, validatorAuthenticate.getValidator());
+        user.setFirstName(setting.getFirstName());
+        user.setLastName(setting.getLastName());
+        user.setLogin(setting.getLogin());
+        user.setCity(setting.getCity());
+        try {
+            if (gender!=null) {
+                user.setGENDER(GENDER.valueOf(gender));
+            }
+        } catch (IllegalArgumentException e) {
+        }
+
+        if (day != null && month != null && year != null) {
+            String currentDay = getDate(day);
+            String currentMounth = getDate(month);
+            String currentYear = getDate(year);
+
+            if (currentDay != null && currentMounth != null && currentYear != null) {
+                Calendar calendar = new GregorianCalendar(Integer.valueOf(currentYear), Integer.valueOf(currentMounth) - 1, Integer.valueOf(currentDay));
+                user.setDate(calendar);
+            }
+        }
+        update(user);
+    }
+
+    @Override
+    public String getDate(String[] day){
+        String date = null;
+        for (String s : day) {
+            if (s != null) {
+                date = s;
+                break;
+            }
+        }
+        return date;
     }
 
     @Override

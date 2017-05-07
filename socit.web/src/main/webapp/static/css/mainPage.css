@@ -10,10 +10,11 @@ input {
     font-size: 15px;
     margin-bottom: 10px;
     text-align: center;
+    color: white;
 }
 
 img{
-    width: 80%;
+    width: 100%;
 }
 .wall {
     display: flex;

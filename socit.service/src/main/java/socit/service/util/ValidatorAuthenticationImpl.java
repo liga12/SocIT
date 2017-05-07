@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import socit.service.UserService;
 import socit.service.exception.RegistrationException;
+import socit.service.pojo.ChangerPassword;
 import socit.service.pojo.Emailer;
 import socit.service.pojo.Passworder;
 import socit.service.pojo.Registrator;
@@ -62,6 +63,17 @@ public class ValidatorAuthenticationImpl implements ValidatorAuthentication {
             if (!passworder.getPassword().equals(passworder.getPasswordConfirmation())) {
                 log.debug("throw new RegistrationException");
                 throw new RegistrationException("Password not equal passwordConfirmation");
+            }
+        }
+        if (object instanceof ChangerPassword){
+            ChangerPassword passworder = (ChangerPassword) object;
+            if (!passworder.getPassword().equals(passworder.getPasswordConfirmation())) {
+                log.debug("throw new RegistrationException");
+                throw new RegistrationException("Password not equal passwordConfirmation");
+            }
+            if (!userService.existsByPassword(passworder.getOldPassword())) {
+                log.debug("throw new RegistrationException");
+                throw new RegistrationException("Password = " + passworder.getOldPassword() + " doesn't exist");
             }
         }
     }

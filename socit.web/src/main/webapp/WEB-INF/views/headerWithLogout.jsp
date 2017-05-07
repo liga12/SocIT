@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="header">
-    <div class="header_logo">SocIT</div>
+    <a class="header_logo" href="/user/home">SocIT</a>
     <a class="exit" href="/logout">EXIT</a>
 </div>
 </body>
