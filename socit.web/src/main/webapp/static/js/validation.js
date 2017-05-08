@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("form").each(function () {
+    $("#form").each(function () {
         $(this).validate({
             rules: {
                 firstName: {

@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import socit.domain.entity.User;
@@ -14,6 +15,7 @@ import socit.service.exception.RegistrationException;
 import socit.service.pojo.ChangerPassword;
 import socit.service.pojo.Settinger;
 
+import javax.servlet.http.Part;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +28,7 @@ public class UserSetting {
 
     @RequestMapping(value = "/user/setting")
     public ModelAndView toSetting(@RequestParam(value = "error", required = false) String error,
-                                  @RequestParam(value = "error", required = false) String errorSetting) {
+                                  @RequestParam(value = "errorSetting", required = false) String errorSetting) {
         ModelAndView modelAndView = new ModelAndView("setting");
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         modelAndView.addObject("user", user);
@@ -84,6 +86,13 @@ public class UserSetting {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/user/setting";
         }
+        return "redirect:/user/setting";
+    }
+
+    @RequestMapping(value = "/user/setting/saveAvatar")
+    public String uploadAvatar(@RequestParam("file") MultipartFile file) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.saveAvatar(file, user);
         return "redirect:/user/setting";
     }
 }

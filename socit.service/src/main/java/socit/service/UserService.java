@@ -1,9 +1,11 @@
 package socit.service;
 
+import org.springframework.web.multipart.MultipartFile;
 import socit.domain.entity.User;
 import socit.service.pojo.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +40,8 @@ public interface UserService extends BaseService<User, Integer> {
     void setSetting(Settinger setting, User user, String gender, String[] day, String[] month, String[] year);
 
     String getDate(String[] day);
+
+    void saveAvatar(MultipartFile part, User user);
 
     void savePassword(ChangerPassword changerPassword);
 }

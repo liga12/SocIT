@@ -16,9 +16,8 @@
     <%@include file="menu.jsp" %>
     <div class="right">
         <div class="change_avatar"> Change Avatar
-            <form action="/uploadFile" method="post" id="send"
-                  enctype="multipart/form-data">
-                <p><input type="file" name="file"  accept="image/*,image/jpeg">
+            <form action="/user/setting/saveAvatar" enctype="multipart/form-data" method="post" id="send">
+                <p><input type="file" name="file"  accept="image/*,image/jpeg" />
                     <input type="submit" value="Send"></p>
             </form>
         </div>

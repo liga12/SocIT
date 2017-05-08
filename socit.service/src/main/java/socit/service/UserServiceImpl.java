@@ -8,16 +8,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import socit.domain.entity.GENDER;
 import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.domain.repository.UserRepository;
 import socit.service.pojo.*;
 import socit.service.util.Mailer;
+import socit.service.util.UploadFiles;
 import socit.service.util.ValidatorAuthentication;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
+import javax.servlet.http.Part;
+import java.io.*;
 import java.util.*;
 
 @Service
@@ -34,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private ValidatorAuthentication validatorAuthenticate;
+
+    @Autowired
+    private UploadFiles uploadFile;
 
     @Override
     @Transactional
@@ -233,6 +239,27 @@ public class UserServiceImpl implements UserService {
             }
         }
         return date;
+    }
+
+    @Override
+    public void saveAvatar(MultipartFile part, User user){
+        int random = (int) (Math.random() * 10000);
+        String fileName = part.getOriginalFilename();
+        if (fileName != null && fileName.length() > 0) {
+            String filePath = uploadFile.getFullSavePath("userId_" + user.getId()) + File.separator +String.valueOf(random)+ "avatar";
+            // Write to file
+            try {
+                byte[] bytes = part.getBytes();
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(filePath));
+                stream.write(bytes);
+                stream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            user.setAvatar("/st/userId_" + user.getId() +"/"+String.valueOf(random)+"avatar");
+            update(user);
+        }
     }
 
     @Override
