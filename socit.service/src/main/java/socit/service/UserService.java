@@ -44,4 +44,6 @@ public interface UserService extends BaseService<User, Integer> {
     void saveAvatar(MultipartFile part, User user);
 
     void savePassword(ChangerPassword changerPassword);
+
+    User getUserByPrincpals();
 }

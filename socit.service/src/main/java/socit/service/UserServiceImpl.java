@@ -19,7 +19,6 @@ import socit.service.util.UploadFiles;
 import socit.service.util.ValidatorAuthentication;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.io.*;
 import java.util.*;
 
@@ -156,24 +155,33 @@ public class UserServiceImpl implements UserService {
         update(user);
     }
 
+    @Override
     public void savePassword(ChangerPassword changerPassword) {
+        log.debug("Request values: ChangerPassword");
+        log.debug("Get lidatorAuthenticate.validate(ChangerPassword, validatorAuthenticate.getValidator()");
         validatorAuthenticate.validate(changerPassword, validatorAuthenticate.getValidator());
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.debug(getUserByPrincpals());
+        User user = getUserByPrincpals();
         user.setPassword(passwordEncoder().encode(changerPassword.getPassword()));
+        log.debug("User set password = "+passwordEncoder().encode(changerPassword.getPassword()));
+        log.debug("update(User)");
         update(user);
     }
 
     @Override
     public Map<String, List<String>> getCalendarData() {
         Map<String, List<String>> collections = new LinkedHashMap<>();
+        log.debug("Get getCollection(1,32)");
         List<String> days = getCollection(1, 32);
+        log.debug("Get getCollection(1,13)");
         List<String> months = getCollection(1, 13);
         Calendar calendar = Calendar.getInstance();
         int currentYear = calendar.get(Calendar.YEAR);
+        log.debug("Get getCollection(" + String.valueOf(currentYear - 100) + ", " + String.valueOf(currentYear - 9) + ")");
         List<String> years = getCollection(currentYear - 100, currentYear - 9);
-        for (int i = currentYear - 100; i < currentYear - 9; i++) {
-            years.add(String.valueOf(i));
-        }
+//            for (int i = currentYear - 100; i < currentYear - 9; i++) {
+//            years.add(String.valueOf(i));
+//        }
         collections.put("days", days);
         collections.put("months", months);
         collections.put("years", years);
@@ -183,54 +191,75 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, String> getUserDate(User user) {
+        log.debug("Request value user");
         Map<String, String> map = new LinkedHashMap<>();
         Calendar date = user.getDate();
+        log.debug("Get date = " + date);
         if (date != null) {
             map.put("day", String.valueOf(date.get(Calendar.DAY_OF_MONTH)));
+            log.debug("Map put [ day," + String.valueOf(date.get(Calendar.DAY_OF_MONTH)) + " ]");
             map.put("month", String.valueOf(date.get(Calendar.MONTH) + 1));
+            log.debug("Map put [ month," + String.valueOf(date.get(Calendar.MONTH) + 1) + " ]");
             map.put("year", String.valueOf(date.get(Calendar.YEAR)));
+            log.debug("Map put [ year," + String.valueOf(date.get(Calendar.YEAR)) + " ]");
         }
         return map;
     }
 
     @Override
     public List<String> getCollection(int startNumber, int finishNumber) {
+        log.debug("Request value: startNumber  = " + startNumber + ", finishNumber = " + finishNumber);
         List<String> collection = new ArrayList<>();
         for (int i = startNumber; i < finishNumber; i++) {
             collection.add(String.valueOf(i));
+            log.debug("Add in collection value = " + String.valueOf(i));
         }
         return collection;
     }
 
     @Override
-    public void setSetting(Settinger setting, User user, String gender, String[] day, String[] month, String[] year ) {
+    public void setSetting(Settinger setting, User user, String gender, String[] day, String[] month, String[] year) {
+        log.debug("Request values: Settinger, User, gender = " + gender + ", day = " + day + ", month = " + month
+                + ", year =" + year);
+        log.debug("Get validatorAuthenticate.validate(Settinger, validatorAuthenticate.getValidator())");
         validatorAuthenticate.validate(setting, validatorAuthenticate.getValidator());
         user.setFirstName(setting.getFirstName());
+        log.debug("User set firstName = "+setting.getFirstName());
         user.setLastName(setting.getLastName());
+        log.debug("User set lastName = "+setting.getLastName());
         user.setLogin(setting.getLogin());
+        log.debug("User set login = "+setting.getLogin());
         user.setCity(setting.getCity());
+        log.debug("User set city = "+setting.getCity());
         try {
-            if (gender!=null) {
+            if (gender != null) {
                 user.setGENDER(GENDER.valueOf(gender));
+                log.debug("User set gender = "+GENDER.valueOf(gender));
             }
         } catch (IllegalArgumentException e) {
+            log.error(e.getMessage());
         }
 
         if (day != null && month != null && year != null) {
             String currentDay = getDate(day);
+            log.debug("currentDay =  "+currentDay);
             String currentMounth = getDate(month);
+            log.debug("currentMounth =  "+currentMounth);
             String currentYear = getDate(year);
+            log.debug("currentYear =  "+currentYear);
 
             if (currentDay != null && currentMounth != null && currentYear != null) {
                 Calendar calendar = new GregorianCalendar(Integer.valueOf(currentYear), Integer.valueOf(currentMounth) - 1, Integer.valueOf(currentDay));
                 user.setDate(calendar);
+                log.debug("User set date = "+calendar);
             }
         }
+        log.debug("update(User)");
         update(user);
     }
 
     @Override
-    public String getDate(String[] day){
+    public String getDate(String[] day) {
         String date = null;
         for (String s : day) {
             if (s != null) {
@@ -242,22 +271,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveAvatar(MultipartFile part, User user){
+    public void saveAvatar(MultipartFile part, User user) {
+        log.debug("Request parameters: MultipartFile, User");
         int random = (int) (Math.random() * 10000);
         String fileName = part.getOriginalFilename();
+        log.debug("Fike name = "+fileName);
         if (fileName != null && fileName.length() > 0) {
-            String filePath = uploadFile.getFullSavePath("userId_" + user.getId()) + File.separator +String.valueOf(random)+ "avatar";
+            log.debug("uploadFile.getFullSavePath(userId"+user.getId()+")");
+            String filePath = uploadFile.getFullSavePath("userId_" + user.getId()) + File.separator
+                    + String.valueOf(random) + "avatar";
+            log.debug("filePath = "+filePath);
             // Write to file
             try {
                 byte[] bytes = part.getBytes();
                 BufferedOutputStream stream = new BufferedOutputStream(
                         new FileOutputStream(filePath));
                 stream.write(bytes);
+                log.debug("File write "+filePath);
                 stream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
-            user.setAvatar("/st/userId_" + user.getId() +"/"+String.valueOf(random)+"avatar");
+            log.debug("Set User avatar = /st/userId_" + user.getId() + "/" + String.valueOf(random) + "avatar");
+            user.setAvatar("/st/userId_" + user.getId() + "/" + String.valueOf(random) + "avatar");
             update(user);
         }
     }
@@ -282,6 +318,16 @@ public class UserServiceImpl implements UserService {
             log.debug("Authentication failed");
             return false;
         }
+    }
+
+    @Override
+    public User getUserByPrincpals() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.debug("Get User from Principals with values: firstName = " + user.getFirstName() + ", lastName = " + user.getLastName()
+                + ", email = " + user.getEmail() + ", login = " + user.getLogin() + ", password = " + user.getPassword()
+                + ", status = " + user.getStatus() + ", authority = " + user.getAuthority() + ", avatar = " + user.getAvatar() +
+                ", city = " + user.getCity() + ", gender = " + user.getGENDER() + ", date of birth = " + user.getDate());
+        return user;
     }
 
     @Bean

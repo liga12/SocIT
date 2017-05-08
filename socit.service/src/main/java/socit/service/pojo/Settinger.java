@@ -2,12 +2,14 @@ package socit.service.pojo;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 import socit.domain.entity.GENDER;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Calendar;
 
+@Log4j
 public class Settinger {
 
     @Getter
@@ -31,7 +33,7 @@ public class Settinger {
 
     @Getter
     @Setter
-    @Size( max = 64, message = "City must be in the range from 1 to 64 characters")
+    @Size(max = 64, message = "City must be in the range from 1 to 64 characters")
     private String city;
 
     @Getter
@@ -47,5 +49,7 @@ public class Settinger {
         this.lastName = lastName;
         this.login = login;
         this.city = city;
+        log.debug("Set values: firstName = " + firstName + ", lastName = " + lastName + ", login = " + login
+                + ", city = " + city);
     }
 }
