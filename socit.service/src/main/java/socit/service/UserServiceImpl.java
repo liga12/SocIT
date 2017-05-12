@@ -124,14 +124,16 @@ public class UserServiceImpl implements UserService {
         User user = new User(registrator.getLogin(), passwordEncoder().encode(registrator.getPassword()),
                 registrator.getFirstName(), registrator.getLastName(), email, false, "ROLE_USER",
                 "/static/images/default_avatar.jpg");
-        save(user);
+
         String url = getFullUrl(request, "/emailConfirmed/", email);
         log.debug("Full URL = " + url);
         log.debug("Set URLMassage");
-        URLMassage urlMassage = new URLMassage(url, user);
-        urlMassageService.save(urlMassage);
         log.debug("Send email");
         mailer.send(email, url, "emailConfirmedHtml.html");
+        save(user);
+        URLMassage urlMassage = new URLMassage(url, user);
+        urlMassageService.save(urlMassage);
+
     }
 
     @Override
@@ -142,9 +144,10 @@ public class UserServiceImpl implements UserService {
         User user = getByEmail(email);
         String url = getFullUrl(request, "/passwordRestore/", email);
         log.debug("Full URL = " + url);
+        mailer.send(email, url, "restorePassword.html");
         URLMassage urlMassage = new URLMassage(url, user);
         urlMassageService.save(urlMassage);
-        mailer.send(email, url, "restorePassword.html");
+        save(user);
     }
 
     @Override

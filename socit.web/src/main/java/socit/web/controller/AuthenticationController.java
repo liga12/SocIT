@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import socit.domain.entity.URLMassage;
@@ -15,9 +14,12 @@ import socit.service.exception.RegistrationException;
 import socit.service.pojo.Emailer;
 import socit.service.pojo.Passworder;
 import socit.service.pojo.Registrator;
-import socit.service.util.Mailer;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Controller
 @Log4j
@@ -55,7 +57,7 @@ public class AuthenticationController {
         return model;
     }
 
-    @RequestMapping(value = "/registrationPage", method = RequestMethod.GET)
+    @RequestMapping(value = "/registrationPage")
     public String toRegistrationPage() {
         log.debug("Request URL = /registrationPage");
         log.debug("Get authentication");
@@ -87,6 +89,13 @@ public class AuthenticationController {
         Registrator registrator = new Registrator(firstName, lastName, login, email, password,
                 passwordConfirmation);
 
+        Map<String, String> viewObjects = new LinkedHashMap<>();
+        viewObjects.put("firstName", firstName);
+        viewObjects.put("lastName", lastName);
+        viewObjects.put("login", login);
+        viewObjects.put("email", email);
+
+
         try {
             log.debug("Get registration");
             userService.registrationUser(registrator, request);
@@ -98,6 +107,16 @@ public class AuthenticationController {
             modelAndView.setViewName("registration");
             log.debug("Go to URL = /registration");
             modelAndView.addObject("data", e.getMessage());
+            for (Map.Entry<String, String> entry : viewObjects.entrySet()) {
+                modelAndView.addObject(entry.getKey(), entry.getValue());
+            }
+            return modelAndView;
+        } catch (RuntimeException e) {
+            modelAndView.setViewName("registration");
+            modelAndView.addObject("data", e.getMessage());
+            for (Map.Entry<String, String> entry : viewObjects.entrySet()) {
+                modelAndView.addObject(entry.getKey(), entry.getValue());
+            }
             return modelAndView;
         }
         log.debug("Go to URL = /onEmailConfirme");
@@ -123,7 +142,7 @@ public class AuthenticationController {
                     + " Enter the username and password to log on to the website");
         } else {
             modelAndView.addObject("error", "Link not found");
-            log.error("Error = Link not found: "+request);
+            log.error("Error = Link not found: " + request);
         }
         log.debug("Go to URL = /login");
         return modelAndView;
@@ -158,11 +177,12 @@ public class AuthenticationController {
             String emailClient = emails[1];
             modelAndView.addObject("host", "https://" + emailClient);
 
-        } catch (RegistrationException e) {
+        } catch (RuntimeException e){
             modelAndView.setViewName("/restorePassword");
             log.error(e.getMessage());
             log.debug("Go to URL = /restorePassword");
             modelAndView.addObject("data", e.getMessage());
+            modelAndView.addObject("email", email);
             return modelAndView;
         }
         log.debug("Go to URL = /onEmailRestore");
@@ -185,7 +205,7 @@ public class AuthenticationController {
 
         } else {
             modelAndView.addObject("error", "Link not found");
-            log.error("Error = Link not found: "+request);
+            log.error("Error = Link not found: " + request);
         }
         log.debug("Go to URL = /newPassword");
         return modelAndView;

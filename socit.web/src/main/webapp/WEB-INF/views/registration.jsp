@@ -14,13 +14,13 @@
 <div class="wall">
     <form id="form" action="/registration"  method="post">
         <label for='firstName'></label>
-        <input type="text" placeholder="First Name" id="firstName" name="firstName"/>
+        <input type="text" placeholder="First Name" id="firstName" name="firstName" value="${firstName}"/>
         <label for='lastName'></label>
-        <input type="text" placeholder="Last Name" id="lastName" name="lastName"/>
+        <input type="text" placeholder="Last Name" id="lastName" name="lastName" value="${lastName}"/>
         <label for='email'></label>
-        <input type="text" placeholder="Email" id="email" name="email"/>
+        <input type="text" placeholder="Email" id="email" name="email"  value="${email}"/>
         <label for='login'></label>
-        <input type="text" placeholder="Login" id="login" name="login"/>
+        <input type="text" placeholder="Login" id="login" name="login" value="${login}"/>
         <label for='password'></label>
         <input type="password" placeholder="Password" id="password" name="password"/>
         <label for='passwordConfirmation'></label>

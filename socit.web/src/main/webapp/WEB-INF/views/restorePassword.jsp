@@ -13,7 +13,7 @@
 <div class="wall">
     <form id="form" action="/restorePassword" method="post">
         <label for='email'></label>
-        <input type="text" placeholder="Email" id="email" name="email"/></td>
+        <input type="text" placeholder="Email" id="email" name="email" value="${email}"/></td>
         <input class="bottom" type="submit" name="registration" value="Go"/>
     </form>
     <c:out value="${data}"/>
