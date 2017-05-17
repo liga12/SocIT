@@ -25,6 +25,8 @@ public interface UserService extends BaseService<User, Integer> {
 
     User getByEmail(String email);
 
+    List<User> findFriends(String name);
+
     Boolean isAuthenticate();
 
     void restorePassword(Emailer emailer, HttpServletRequest request);

@@ -74,12 +74,24 @@ public class User implements UserDetails, GrantedAuthority {
     @Getter
     @Setter
     @Enumerated(EnumType.STRING)
-    private GENDER GENDER;
+    private socit.domain.enums.GENDER GENDER;
 
     @OneToMany(mappedBy = "user")
     @Getter
     @Setter
     private List<URLMassage> urlMassages;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user")
+    @Getter
+    @Setter
+    private List<Friend> friends;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user")
+    @Getter
+    @Setter
+    private List<Friend> friends2;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "user")

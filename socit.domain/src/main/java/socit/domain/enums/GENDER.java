@@ -1,4 +1,4 @@
-package socit.domain.entity;
+package socit.domain.enums;
 
 public enum GENDER {
     MALE, FEMALE, OTHER

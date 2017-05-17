@@ -3,7 +3,7 @@ package socit.service.pojo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import socit.domain.entity.GENDER;
+import socit.domain.enums.GENDER;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

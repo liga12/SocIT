@@ -6,12 +6,9 @@
 </head>
 <body>
 <div class="left">
-    <%--<a class="menu" href="">avatar</a>--%>
-    <%--<a class="menu" href="">bookmark</a>--%>
-    <%--<a class="menu" href="">friends</a>--%>
     <a class="menu" href="/user/home">my page</a>
     <a class="menu" href="/user/setting">setting</a>
-    <%--<a class="menu" href="">news</a>--%>
+    <a class="menu" href="/user/friends">friends</a>
 </div>
 </body>
 </html>

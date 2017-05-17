@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import socit.domain.entity.GENDER;
+import socit.domain.enums.GENDER;
 import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
 import socit.domain.repository.UserRepository;
@@ -113,6 +113,14 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         log.debug("Email = " + email);
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public List<User> findFriends(String name){
+        log.debug("Name = " + name);
+        return userRepository.
+                findByFirstNameContainingAndStatusEqualsOrLastNameContainingAndStatusEquals(name, true, name, true);
     }
 
     @Override
