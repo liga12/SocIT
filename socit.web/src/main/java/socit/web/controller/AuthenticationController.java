@@ -88,14 +88,11 @@ public class AuthenticationController {
         log.debug("Set Registrator");
         Registrator registrator = new Registrator(firstName, lastName, login, email, password,
                 passwordConfirmation);
-
         Map<String, String> viewObjects = new LinkedHashMap<>();
         viewObjects.put("firstName", firstName);
         viewObjects.put("lastName", lastName);
         viewObjects.put("login", login);
         viewObjects.put("email", email);
-
-
         try {
             log.debug("Get registration");
             userService.registrationUser(registrator, request);

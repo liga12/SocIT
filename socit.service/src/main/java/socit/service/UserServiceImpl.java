@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import socit.domain.entity.Post;
 import socit.domain.enums.GENDER;
 import socit.domain.entity.URLMassage;
 import socit.domain.entity.User;
@@ -20,6 +21,7 @@ import socit.service.util.ValidatorAuthentication;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service

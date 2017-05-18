@@ -12,7 +12,13 @@ public interface FriendService extends BaseService<Friend, Integer> {
 
     List<Friend> getFriendsByFriendAndFriendstatus(User user, FRIENDSTATUS friendstatus);
 
-    List<Friend> getFriendsByUserAndFriendstatus(User user);
-
     Friend getFriendByUserAndFriend(User user, User friend);
+
+    void rejectFriend(String id);
+
+    void confirmFriend(String id);
+
+    void deleteFriends(String id, String idFriend, String idUser);
+
+    void addFriends(String id, String idFriend);
 }

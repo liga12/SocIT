@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 import socit.domain.entity.Friend;
 import socit.domain.entity.User;
 import socit.domain.enums.FRIENDSTATUS;
-import socit.domain.repository.FriendRepository;
 import socit.service.FriendService;
 import socit.service.UserService;
 
@@ -25,21 +24,18 @@ public class UserFriend {
     @Autowired
     private FriendService friendService;
 
-    @Autowired
-    private FriendRepository friendRepository;
-
     @Transactional
     @RequestMapping(value = "/user/friends")
     public ModelAndView toFriends() {
         ModelAndView modelAndView = new ModelAndView("friends");
         modelAndView.addObject("user", userService.getUserByPrincpals());
-        List<Friend> friends = friendService.getFriendsByUser(userService.getUserByPrincpals());
-        modelAndView.addObject("friends", friends);
-        List<Friend> applicationFriends = friendService.getFriendsByFriendAndFriendstatus(userService.getUserByPrincpals(),
-                FRIENDSTATUS.WAIT);
+        modelAndView.addObject
+                ("friends", friendService.getFriendsByUser(userService.getUserByPrincpals()));
+        List<Friend> applicationFriends = friendService.getFriendsByFriendAndFriendstatus
+                (userService.getUserByPrincpals(), FRIENDSTATUS.WAIT);
         if (applicationFriends.size() > 0) {
             modelAndView.addObject("applicationsFriends", applicationFriends);
-            modelAndView.addObject("menuFriends", applicationFriends.size());
+//            modelAndView.addObject("menuFriends", applicationFriends.size());
         }
         return modelAndView;
     }
@@ -81,16 +77,7 @@ public class UserFriend {
     @RequestMapping(value = "/user/addFriends")
     public String addFriends(@RequestParam(value = "id") String id,
                              @RequestParam(value = "idFriend", required = false) String idFriend) {
-        if (idFriend != null) {
-            Friend friend = friendService.getById(Integer.valueOf(idFriend));
-            if (friend != null) {
-                friend.setFriendstatus(FRIENDSTATUS.WAIT);
-                friendService.update(friend);
-            }
-        } else {
-            friendService.save(new Friend(userService.getUserByPrincpals(),
-                    userService.getById(Integer.valueOf(id)), FRIENDSTATUS.WAIT));
-        }
+        friendService.addFriends(id, idFriend);
         return "redirect:/user/friends";
     }
 
@@ -98,37 +85,19 @@ public class UserFriend {
     public String deleteFriends(@RequestParam(value = "id") String id,
                                 @RequestParam(value = "idFriend", required = false) String idFriend,
                                 @RequestParam(value = "idUser", required = false) String idUser) {
-        Friend friend = friendService.getById(Integer.valueOf(id));
-        friendService.remove(friend);
-        if (idFriend != null && idUser != null) {
-            Friend friend1 = friendService.getFriendByUserAndFriend
-                    (userService.getById(Integer.valueOf(idFriend)),userService.getById(Integer.valueOf(idUser)));
-            friend1.setFriendstatus(FRIENDSTATUS.REJECTED);
-            friendService.update(friend1);
-        }
+        friendService.deleteFriends(id, idFriend, idUser);
         return "redirect:/user/friends";
     }
 
     @RequestMapping(value = "/user/confirmFriends")
     public String confirmFriend(@RequestParam(value = "id") String id) {
-        Friend friend = friendService.getById(Integer.valueOf(id));
-        if (friend != null) {
-            friend.setFriendstatus(FRIENDSTATUS.CONFIRM);
-            friendService.update(friend);
-            Friend friend1 = new Friend(userService.getUserByPrincpals(), friend.getUser(), FRIENDSTATUS.CONFIRM);
-            friendService.save(friend1);
-        }
-
+        friendService.confirmFriend(id);
         return "redirect:/user/friends";
     }
 
     @RequestMapping(value = "/user/rejectFriends")
     public String rejectFriend(@RequestParam(value = "id") String id) {
-        Friend friend = friendService.getById(Integer.valueOf(id));
-        if (friend != null) {
-            friend.setFriendstatus(FRIENDSTATUS.REJECTED);
-            friendService.update(friend);
-        }
+        friendService.rejectFriend(id);
         return "redirect:/user/friends";
     }
 }

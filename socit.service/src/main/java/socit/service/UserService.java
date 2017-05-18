@@ -1,6 +1,7 @@
 package socit.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import socit.domain.entity.Post;
 import socit.domain.entity.User;
 import socit.service.pojo.*;
 

@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import socit.domain.entity.Friend;
 import socit.domain.entity.Post;
 import socit.domain.entity.User;
-import socit.domain.repository.PostRepository;
 import socit.service.FriendService;
 import socit.service.PhotoPostService;
 import socit.service.PostService;
@@ -39,9 +37,6 @@ public class UserController {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private FriendService friendService;
-
     @Transactional
     @RequestMapping(value = "/user/home")
     public ModelAndView toUserWall() {
@@ -55,7 +50,7 @@ public class UserController {
             modelAndView.addObject("user", user);
             Calendar date = user.getDate();
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            if (date!=null) {
+            if (date != null) {
                 modelAndView.addObject("date", formatter.format(date.getTime()));
             }
             List<Post> listPost = new ArrayList<>();
@@ -81,7 +76,7 @@ public class UserController {
     public String uploadImage(@RequestParam("description") String description,
                               @RequestParam(value = "all", required = false) String[] allUser,
                               @RequestParam("file") MultipartFile[] myFile) {
-        if (description!=null&&myFile[0].getSize()>0){
+        if (description != null || myFile[0].getSize() > 0) {
             try {
                 photoPostService.savePhotoPost(description, allUser, myFile);
             } catch (IOException e) {
@@ -92,19 +87,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/post/delete")
-    public String postDelete(@RequestParam(value = "id") Integer id) {
-        Post post = postService.getById(id);
-        post.setStatus(false);
-        postService.update(post);
+    public String postDelete(@RequestParam(value = "id") String id) {
+        postService.deletePost(id);
         return "redirect:/user/home";
     }
 
     @RequestMapping(value = "/post/edit")
-    public String postEdit(@RequestParam(value = "id") Integer id,
+    public String postEdit(@RequestParam(value = "id") String id,
                            @RequestParam(value = "comment") String comment) {
-       Post post =  postService.getById(id);
-       post.setComment(comment);
-       postService.update(post);
+        postService.editPost(id, comment);
         return "redirect:/user/home";
     }
 }

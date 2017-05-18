@@ -19,6 +19,9 @@ public class FriendServiceImpl implements FriendService {
     @Autowired
     private FriendRepository friendRepository;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     @Transactional
     public Friend getById(Integer id) {
@@ -61,12 +64,80 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<Friend> getFriendsByUserAndFriendstatus(User user) {
-        return friendRepository.findByUserAndFriendstatus(user, FRIENDSTATUS.REJECTED);
+    public Friend getFriendByUserAndFriend(User user, User friend) {
+        return friendRepository.findByUserAndFriend(user, friend);
     }
 
     @Override
-    public Friend getFriendByUserAndFriend(User user, User friend) {
-        return friendRepository.findByUserAndFriend(user, friend);
+    public void rejectFriend(String id) {
+        try {
+            Friend friend = getById(Integer.valueOf(id));
+            if (friend != null) {
+                friend.setFriendstatus(FRIENDSTATUS.REJECTED);
+                update(friend);
+            }
+        } catch (NumberFormatException e) {
+            log.error(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void confirmFriend(String id) {
+        try {
+            Friend friend = getById(Integer.valueOf(id));
+            if (friend != null) {
+                friend.setFriendstatus(FRIENDSTATUS.CONFIRM);
+                update(friend);
+                Friend friend1 = new Friend(userService.getUserByPrincpals(), friend.getUser(), FRIENDSTATUS.CONFIRM);
+                save(friend1);
+            }
+        } catch (NumberFormatException e) {
+            log.error(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void deleteFriends(String id, String idFriend, String idUser) {
+        try {
+            remove(getById(Integer.valueOf(id)));
+            if (idFriend != null && idUser != null) {
+                try {
+                    Friend friend = getFriendByUserAndFriend
+                            (userService.getById(Integer.valueOf(idFriend)), userService.getById(Integer.valueOf(idUser)));
+                    friend.setFriendstatus(FRIENDSTATUS.REJECTED);
+                    update(friend);
+                } catch (NumberFormatException e) {
+                    log.error(e.getMessage());
+                }
+
+            }
+        } catch (NumberFormatException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    @Override
+    public void addFriends(String id, String idFriend) {
+        if (idFriend != null) {
+            try {
+                Friend friend = getById(Integer.valueOf(idFriend));
+                if (friend != null) {
+                    friend.setFriendstatus(FRIENDSTATUS.WAIT);
+                    update(friend);
+                }
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            }
+
+        } else {
+            try {
+                save(new Friend(userService.getUserByPrincpals(),
+                        userService.getById(Integer.valueOf(id)), FRIENDSTATUS.WAIT));
+            } catch (NumberFormatException e) {
+                log.error(e.getMessage());
+            }
+        }
     }
 }
