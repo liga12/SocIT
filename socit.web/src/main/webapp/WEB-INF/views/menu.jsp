@@ -8,7 +8,7 @@
 <div class="left">
     <a class="menu" href="/user/home">my page</a>
     <a class="menu" href="/user/setting">setting</a>
-    <a class="menu" href="/user/friends">friends</a>
+    <a class="menu" href="/user/friends">friends ${menuFriends}</a>
 </div>
 </body>
 </html>

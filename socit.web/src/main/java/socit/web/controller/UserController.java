@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import socit.domain.entity.Friend;
 import socit.domain.entity.Post;
 import socit.domain.entity.User;
 import socit.domain.repository.PostRepository;
+import socit.service.FriendService;
 import socit.service.PhotoPostService;
 import socit.service.PostService;
 import socit.service.UserService;
@@ -30,10 +32,15 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
     @Autowired
     private PhotoPostService photoPostService;
+
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private FriendService friendService;
 
     @Transactional
     @RequestMapping(value = "/user/home")
@@ -66,6 +73,7 @@ public class UserController {
             modelAndView.setViewName("/login");
             modelAndView.addObject("error", "You have not confirmed registration via email");
         }
+
         return modelAndView;
     }
 

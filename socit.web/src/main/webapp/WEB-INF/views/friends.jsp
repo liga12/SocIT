@@ -17,6 +17,25 @@
                 <input type="submit"/>
             </form>
         </div>
+        <c:if test="${fn:length(applicationsFriends) > 0 }">
+            Applications To Friends
+        </c:if>
+        <c:forEach items="${applicationsFriends}" var="application">
+            <div class="friend">
+                <div class="friends_avatar">
+                    <img src="${application.user.avatar}">
+                </div>
+                <div class="name">${application.user.firstName} ${application.user.lastName}</div>
+                <div class="action">
+                    <a href="/user/confirmFriends?id=${application.id}">
+                        <input type="submit" value="Confirm">
+                    </a>
+                    <a href="/user/rejectFriends?id=${application.id}">
+                        <input type="submit" value="Reject">
+                    </a>
+                </div>
+            </div>
+        </c:forEach>
         <c:if test="${fn:length(friends) > 0 }">
             You Friends
         </c:if>
@@ -26,10 +45,26 @@
                     <img src="${friend.friend.avatar}">
                 </div>
                 <div class="name">${friend.friend.firstName} ${friend.friend.lastName}</div>
+                <div>${friend.friendstatus}</div>
                 <div class="action">
-                    <a href="/user/deleteFriends?id=${friend.id}">
-                        <input type="submit" value="Delete">
-                    </a>
+                    <c:if test="${friend.friendstatus=='REJECTED'}">
+                        <a href="/user/addFriends?id=${friend.friend.id}&idFriend=${friend.id}">
+                            <input type="submit" value="Add">
+                        </a>
+                        <a href="/user/deleteFriends?id=${friend.id}">
+                            <input type="submit" value="Delete">
+                        </a>
+                    </c:if>
+                    <c:if test="${friend.friendstatus=='WAIT'}">
+                        <a href="/user/deleteFriends?id=${friend.id}">
+                            <input type="submit" value="Delete">
+                        </a>
+                    </c:if>
+                    <c:if test="${friend.friendstatus=='CONFIRM'}">
+                        <a href="/user/deleteFriends?id=${friend.id}&idFriend=${friend.friend.id}&idUser=${friend.user.id}">
+                            <input type="submit" value="Delete">
+                        </a>
+                    </c:if>
                 </div>
             </div>
         </c:forEach>
