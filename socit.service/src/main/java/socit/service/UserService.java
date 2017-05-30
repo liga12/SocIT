@@ -6,7 +6,6 @@ import socit.domain.entity.User;
 import socit.service.pojo.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import java.util.List;
 import java.util.Map;
 
@@ -49,4 +48,10 @@ public interface UserService extends BaseService<User, Integer> {
     void savePassword(ChangerPassword changerPassword);
 
     User getUserByPrincpals();
+
+    List<Post> getUserPost(User user);
+
+    String formatUserDate(User user);
+
+
 }

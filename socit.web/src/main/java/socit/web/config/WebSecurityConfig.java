@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").access("hasRole('USER')")
                 .and().formLogin().loginPage("/login").permitAll()
                 .usernameParameter("login")
-                .defaultSuccessUrl("/user/home", false).and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
+                .defaultSuccessUrl("/user/setting", false).and().logout().logoutUrl("/logout").logoutSuccessUrl("/login");
         http.sessionManagement().maximumSessions(100).sessionRegistry(sessionRegistry());
     }
 

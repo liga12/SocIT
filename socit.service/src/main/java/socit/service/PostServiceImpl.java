@@ -62,9 +62,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(Integer id) {
+    public void deletePost(String id) {
         try {
-            Post post = getById(id);
+            Post post = getById(Integer.valueOf(id));
             post.setStatus(false);
             update(post);
         } catch (NumberFormatException e) {

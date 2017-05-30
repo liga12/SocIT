@@ -31,11 +31,10 @@ public class UserFriend {
         modelAndView.addObject("user", userService.getUserByPrincpals());
         modelAndView.addObject
                 ("friends", friendService.getFriendsByUser(userService.getUserByPrincpals()));
-        List<Friend> applicationFriends = friendService.getFriendsByFriendAndFriendstatus
+        List<Friend> applicationFriends = friendService.getFriendsByFriendAndFriendStatus
                 (userService.getUserByPrincpals(), FRIENDSTATUS.WAIT);
         if (applicationFriends.size() > 0) {
             modelAndView.addObject("applicationsFriends", applicationFriends);
-//            modelAndView.addObject("menuFriends", applicationFriends.size());
         }
         return modelAndView;
     }

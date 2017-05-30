@@ -2,13 +2,14 @@ package socit.web.controller;
 
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import socit.domain.entity.Friend;
 import socit.domain.entity.Post;
 import socit.domain.entity.User;
 import socit.service.FriendService;
@@ -16,11 +17,8 @@ import socit.service.PhotoPostService;
 import socit.service.PostService;
 import socit.service.UserService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -37,37 +35,56 @@ public class UserController {
     @Autowired
     private PostService postService;
 
-    @Transactional
+    @Autowired
+    private FriendService friendService;
+
     @RequestMapping(value = "/user/home")
-    public ModelAndView toUserWall() {
-        log.debug("request: /user/home");
-        log.debug("Get user by authentication user");
-        User userByAuthentication = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.debug("Get user by id = " + userByAuthentication.getId());
-        User user = userService.getById(userByAuthentication.getId());
+    public String toUserWall() {
+        Integer userId = userService.getUserByPrincpals().getId();
+        return "redirect:/user/id" + userId + "/home";
+    }
+
+    @Transactional
+    @RequestMapping("/user/{id}/home")
+    public ModelAndView toAnyWall(@PathVariable(value = "id") String id, HttpServletResponse response) throws IOException {
+        String idUser = id.substring(2, id.length());
+        User user;
+        int userId;
+        try {
+            userId = Integer.valueOf(idUser);
+            user = userService.getById(userId);
+            if (user == null) {
+                throw new NullPointerException();
+            }
+        } catch (NumberFormatException | NullPointerException e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return new ModelAndView("redirect:/error");
+        }
         ModelAndView modelAndView = new ModelAndView("user_wall");
         if (user.getStatus()) {
             modelAndView.addObject("user", user);
-            Calendar date = user.getDate();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            String date = userService.formatUserDate(user);
             if (date != null) {
-                modelAndView.addObject("date", formatter.format(date.getTime()));
+                modelAndView.addObject("date", date);
             }
-            List<Post> listPost = new ArrayList<>();
-            List<Post> lists = user.getPosts();
-            if (lists != null) {
-                for (Post list : lists) {
-                    if (list.getStatus()) {
-                        listPost.add(list);
-                    }
-                }
-            }
-            Collections.reverse(listPost);
+            List<Post> listPost = userService.getUserPost(user);
             modelAndView.addObject("list", listPost);
         } else {
             modelAndView.setViewName("/login");
             modelAndView.addObject("error", "You have not confirmed registration via email");
         }
+        List<Friend> friends = friendService.getFriendsByUser(user);
+        Boolean friendStatus = false;
+        for (Friend friend : friends) {
+            if (friend.getFriend().equals(userService.getUserByPrincpals())) {
+                friendStatus = true;
+                break;
+            }
+        }
+        ModelAndView modelAndView1 = friendStatus ?
+                modelAndView.addObject("friendStatus", true) :
+                modelAndView.addObject("friendStatus", false);
+
 
         return modelAndView;
     }

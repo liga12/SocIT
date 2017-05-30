@@ -23,9 +23,13 @@
         <c:forEach items="${applicationsFriends}" var="application">
             <div class="friend">
                 <div class="friends_avatar">
-                    <img src="${application.user.avatar}">
+                    <a href="/user/id${application.user.id}/home">
+                        <img src="${application.user.avatar}">
+                    </a>
                 </div>
-                <div class="name">${application.user.firstName} ${application.user.lastName}</div>
+                <a href="/user/id${application.user.id}/home">
+                    <div class="name">${application.user.firstName} ${application.user.lastName}</div>
+                </a>
                 <div class="action">
                     <a href="/user/confirmFriends?id=${application.id}">
                         <input type="submit" value="Confirm">
@@ -42,9 +46,13 @@
         <c:forEach items="${friends}" var="friend">
             <div class="friend">
                 <div class="friends_avatar">
-                    <img src="${friend.friend.avatar}">
+                    <a href="/user/id${friend.friend.id}/home">
+                        <img src="${friend.friend.avatar}">
+                    </a>
                 </div>
-                <div class="name">${friend.friend.firstName} ${friend.friend.lastName}</div>
+                <a href="/user/id${friend.friend.id}/home">
+                    <div class="name">${friend.friend.firstName} ${friend.friend.lastName}</div>
+                </a>
                 <div>${friend.friendstatus}</div>
                 <div class="action">
                     <c:if test="${friend.friendstatus=='REJECTED'}">
@@ -74,9 +82,14 @@
         <c:forEach items="${users}" var="user">
             <div class="friend">
                 <div class="friends_avatar">
-                    <img src="${user.avatar}">
+                    <a href="/user/id${user.id}/home">
+                        <img src="${user.avatar}">
+                    </a>
                 </div>
-                <div class="name">${user.firstName} ${user.lastName}</div>
+                <div class="name">
+                    <a href="/user/id${user.id}/home">${user.firstName} ${user.lastName}
+                    </a>
+                </div>
                 <div class="action">
                     <a href="/user/addFriends?id=${user.id}">
                         <input type="submit" value="Add">

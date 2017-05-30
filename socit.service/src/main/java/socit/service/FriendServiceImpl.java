@@ -59,7 +59,7 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<Friend> getFriendsByFriendAndFriendstatus(User user, FRIENDSTATUS friendstatus) {
+    public List<Friend> getFriendsByFriendAndFriendStatus(User user, FRIENDSTATUS friendstatus) {
         return friendRepository.findByFriendAndFriendstatus(user, friendstatus);
     }
 

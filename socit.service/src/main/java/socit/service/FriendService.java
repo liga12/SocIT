@@ -10,7 +10,7 @@ public interface FriendService extends BaseService<Friend, Integer> {
 
     List<Friend> getFriendsByUser(User user);
 
-    List<Friend> getFriendsByFriendAndFriendstatus(User user, FRIENDSTATUS friendstatus);
+    List<Friend> getFriendsByFriendAndFriendStatus(User user, FRIENDSTATUS friendstatus);
 
     Friend getFriendByUserAndFriend(User user, User friend);
 

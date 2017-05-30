@@ -343,6 +343,32 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public List<Post> getUserPost(User user) {
+        List<Post> listPost = new ArrayList<>();
+        List<Post> lists = user.getPosts();
+        if (lists != null) {
+            for (Post list : lists) {
+                if (list.getStatus()) {
+                    listPost.add(list);
+                }
+            }
+        }
+        Collections.reverse(listPost);
+        return listPost;
+    }
+
+    @Override
+    public String formatUserDate(User user) {
+        Calendar date = user.getDate();
+        if (date!=null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+            String formateDate = formatter.format(date.getTime());
+            return formateDate;
+        }
+        return null;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new PasswordEncoder() {
