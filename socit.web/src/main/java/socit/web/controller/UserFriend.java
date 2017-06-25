@@ -74,9 +74,9 @@ public class UserFriend {
     }
 
     @RequestMapping(value = "/user/addFriends")
-    public String addFriends(@RequestParam(value = "id") String id,
+    public String addFriends(@RequestParam(value = "id") String idUser,
                              @RequestParam(value = "idFriend", required = false) String idFriend) {
-        friendService.addFriends(id, idFriend);
+        friendService.addFriends(idUser, idFriend);
         return "redirect:/user/friends";
     }
 

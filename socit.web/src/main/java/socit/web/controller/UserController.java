@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import static socit.domain.enums.FRIENDSTATUS.CONFIRM;
+
 @Controller
 @Log4j
 public class UserController {
@@ -64,6 +66,9 @@ public class UserController {
         if (user.getStatus()) {
             modelAndView.addObject("user", user);
             String date = userService.formatUserDate(user);
+            if (userService.getUserByPrincpals().getId() == userId) {
+                modelAndView.addObject("userWall", true);
+            }
             if (date != null) {
                 modelAndView.addObject("date", date);
             }
@@ -76,14 +81,14 @@ public class UserController {
         List<Friend> friends = friendService.getFriendsByUser(user);
         Boolean friendStatus = false;
         for (Friend friend : friends) {
-            if (friend.getFriend().equals(userService.getUserByPrincpals())) {
-                friendStatus = true;
-                break;
+            if (friend.getFriend().getId().equals(userService.getUserByPrincpals().getId())) {
+                if (friend.getFriendstatus() == CONFIRM) {
+                    friendStatus = true;
+                    break;
+                }
             }
         }
-        ModelAndView modelAndView1 = friendStatus ?
-                modelAndView.addObject("friendStatus", true) :
-                modelAndView.addObject("friendStatus", false);
+        modelAndView.addObject("friendStatus", friendStatus);
 
 
         return modelAndView;
